@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateSiteSocials extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('site_socials', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('source');
+            $table->string('title')->nullable();
+            $table->string('text')->nullable();
+            $table->string('image')->nullable();
+            $table->string('extra')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('site_socials');
+    }
+}

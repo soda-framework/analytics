@@ -1,0 +1,40 @@
+https://github.com/spatie/laravel-analytics
+
+
+
+CONSOLE API
+
+Create account:
+-
+
+Create Service Account:
+-
+
+Create the service account key (json file)
+- https://cloud.google.com/iam/docs/creating-managing-service-account-keys
+-- Upload to S3
+-- store s3 url in the database
+
+Enable the API
+- https://cloud.google.com/service-management/enable-disable
+-- analytics.googleapis.com
+
+
+
+ANALYTICS API
+
+Create the property
+- https://developers.google.com/analytics/devguides/config/mgmt/v3/account-management (requires whitelisting for write access)
+-- OAuth
+-- List accounts
+-- list account properties
+-- choose existing or create a new Account > Property
+
+Get View ID for property
+- https://developers.google.com/analytics/devguides/config/mgmt/v3/account-management
+-- store in the database
+
+Add user to property
+- https://developers.google.com/analytics/devguides/config/mgmt/v3/user-management#add_a_single_user
+-- get the service account email from the service account key JSON file
+-- add the key to the property

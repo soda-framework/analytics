@@ -1,0 +1,35 @@
+{
+  "name": "soda-framework/analytics",
+  "license": "MIT",
+  "description": "Soda Framework: Analytics",
+  "keywords": [
+    "Soda",
+    "Laravel",
+    "Google",
+    "Analytics"
+  ],
+  "authors": [
+    {
+      "name": "Caleb Chadwick",
+      "email": "chadwickcaleb@gmail.com"
+    },
+    {
+      "name": "Ryan Brereton-Canham",
+      "email": "ryzaar@hotmail.com"
+    },
+    {
+      "name": "Jarrad Littleford",
+      "email": "jplittleford@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "laravel/framework": "~5.3",
+    "spatie/laravel-analytics": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Soda\\Analytics\\": "src/"
+    }
+  }
+}

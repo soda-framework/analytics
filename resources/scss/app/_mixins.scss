@@ -1,0 +1,207 @@
+// generic transform
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+// rotate
+@mixin rotate ($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+// rotate
+@mixin rotateX ($deg) {
+  @include transform(rotateX(#{$deg}deg));
+}
+@mixin rotateY ($deg) {
+  @include transform(rotateY(#{$deg}deg));
+}
+@mixin rotateZ ($deg) {
+  @include transform(rotateZ(#{$deg}deg));
+}
+
+// scale
+@mixin scale($scale) {
+  @include transform(scale($scale));
+}
+// translate
+@mixin translate ($x, $y) {
+  @include transform(translate($x, $y));
+}
+// skew
+@mixin skew ($x, $y) {
+  @include transform(skew(#{$x}deg, #{$y}deg));
+}
+//transform origin
+@mixin transform-origin ($origin) {
+  moz-transform-origin: $origin;
+  -o-transform-origin: $origin;
+  -ms-transform-origin: $origin;
+  -webkit-transform-origin: $origin;
+  transform-origin: $origin;
+}
+
+@mixin scaleX($amt) {
+  -webkit-transform: scaleX($amt);
+  -ms-transform: scaleX($amt); /* IE 9 */
+  transform: scaleX($amt);
+  -moz-transform: scaleX($amt);
+}
+
+//Arrow
+@mixin arrow ($size, $color) {
+  &:after {
+    left: 10px;//calc(50% - #{$size} / 2);
+    top: -100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0,0,0, 0);
+    border-bottom-color: $color;
+    border-width: $size;
+    margin-top: calc(#{$size} + 5px);
+  }
+}
+
+@mixin bg-cover(){
+  background: center center / cover no-repeat;
+}
+@mixin bg-contain(){
+  background: center center / contain no-repeat;
+}
+
+@mixin font-heading($weight, $size) {
+  //font-family: "cooper-black-std",sans-serif;
+  font-family: "open-sans",sans-serif;
+  font-style: normal;
+  font-size:$size;
+  font-weight: $weight;
+}
+
+@mixin placeholder {
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}
+
+@mixin absolute($top,$right,$bottom,$left,$z) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  z-index: $z;
+}
+@mixin fixed($top,$right,$bottom,$left,$z) {
+  position: fixed;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  z-index: $z;
+}
+
+@mixin textshadow($px){
+  text-shadow:
+          -$px -$px 0 #000,
+          $px -$px 0 #000,
+          -$px $px 0 #000,
+          $px $px 0 #000;
+}
+
+@mixin center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+@mixin x-center() {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@mixin y-center() {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin border-gradient-top-bottom($color1,$color2){
+  border-style: solid;
+  -webkit-border-image:
+          -webkit-gradient(linear, 0 0, 0 100%, from($color1), to($color2)) 1 100%;
+  -webkit-border-image:
+          -webkit-linear-gradient($color1, $color2) 1 100%;
+  -moz-border-image:
+          -moz-linear-gradient($color1, $color2) 1 100%;
+  -o-border-image:
+          -o-linear-gradient($color1, $color2) 1 100%;
+  border-image:
+          linear-gradient(to bottom, $color1, $color2) 1 100%;
+}
+
+@mixin border-gradient-left-right($color1,$color2){
+  border-style: solid;
+  -webkit-border-image:
+          -webkit-gradient(linear, 100% 0, 0 0, from($color1), to($color2)) 1 100%;
+  -webkit-border-image:
+          -webkit-linear-gradient(right, $color1, $color2) 1 100%;
+  -moz-border-image:
+          -moz-linear-gradient(right, $color1, $color2) 1 100%;
+  -o-border-image:
+          -o-linear-gradient(right, $color1, $color2) 1 100%;
+  border-image:
+          linear-gradient(to right, $color1, $color2) 1 100%;
+}
+
+@mixin bg-gradient-left-right($color1,$color2){
+  background: $color1; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, $color1 , $color2); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, $color1, $color2); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, $color1, $color2); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, $color1 , $color2); /* Standard syntax */
+}
+
+@mixin bg-gradient-top-bottom($color1,$color2){
+  background: $color1; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient( $color1, $color2); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient( $color1, $color2); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient( $color1, $color2); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($color1, $color2); /* Standard syntax */
+}
+
+@mixin bg-gradient-top-left-bottom-right($color1,$color2){
+  background: $color1; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left top, $color1, $color2); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(bottom right, $color1, $color2); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(bottom right, $color1, $color2); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to bottom right, $color1, $color2); /* Standard syntax */
+}
+
+@mixin blur($px){
+  -webkit-filter: blur($px);
+  -moz-filter: blur($px);
+  -o-filter: blur($px);
+  -ms-filter: blur($px);
+  filter: blur($px);
+}
+
+@mixin aspect_h($w,$h){
+  width: 100%;
+  height: 0;
+  padding-bottom: calc(100% * #{$h} / #{$w});
+  position: relative;
+
+  > div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

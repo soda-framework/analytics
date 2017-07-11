@@ -1,0 +1,76 @@
+//
+//
+// COLOURS
+//
+//
+/*
+  $colours: (
+    "transparent" : transparent,
+    "black" : $black,
+    "white" : $white,
+    "grey" : $grey,
+    "grey-darker" : $grey-darker,
+    "primary-colour" : $primary-colour,
+    "secondary-colour" : $secondary-colour,
+);
+*/
+@if variable-exists(colours) {
+  @each $colour, $hex in $colours {
+    .text-#{$colour} {
+      color: #{$hex} !important;
+      transition: color $transition-delay;
+    }
+    .text-hover-#{$colour}:hover {
+      color: #{$hex} !important;
+      transition: color $transition-delay;
+    }
+    .bg-#{$colour} {
+      background-color: #{$hex} !important;
+      transition: background-color $transition-delay;
+    }
+    .bg-hover-#{$colour}:hover{
+      background-color: #{$hex} !important;
+      transition: background-color $transition-delay;
+    }
+    .border-#{$colour} {
+      border-color: #{$hex} !important;
+      transition: border-color $transition-delay;
+    }
+    .border-hover-#{$colour}:hover {
+      border-color: #{$hex} !important;
+      transition: border-color $transition-delay;
+    }
+  }
+  @if variable-exists(breakpoints_up) {
+    @each $breakpoint, $range in $breakpoints_up {
+      @media #{$range} {
+        @each $colour, $hex in $colours {
+          .text-#{$colour}-#{$breakpoint}-up {
+            color: #{$hex} !important;
+            transition: color $transition-delay;
+          }
+          .text-hover-#{$colour}-#{$breakpoint}-up:hover {
+            color: #{$hex} !important;
+            transition: color $transition-delay;
+          }
+          .bg-#{$colour}-#{$breakpoint}-up {
+            background-color: #{$hex} !important;
+            transition: background-color $transition-delay;
+          }
+          .bg-hover-#{$colour}-#{$breakpoint}-up:hover {
+            background-color: #{$hex} !important;
+            transition: background-color $transition-delay;
+          }
+          .border-#{$colour}-#{$breakpoint}-up {
+            border-color: #{$hex} !important;
+            transition: border-color $transition-delay;
+          }
+          .border-hover-#{$colour}-#{$breakpoint}-up:hover {
+            border-color: #{$hex} !important;
+            transition: border-color $transition-delay;
+          }
+        }
+      }
+    }
+  }
+}

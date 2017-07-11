@@ -1,0 +1,60 @@
+/*Fonts*/
+$screen_sizes: (
+        "xs-up"     :   ( min-width: $screen-xs-min ),
+        "sm-up"     :   ( min-width: $screen-sm-min ),
+        "md-up"     :   ( min-width: $screen-md-min ),
+        "lg-up"     :   ( min-width: $screen-lg-min ),
+);
+$text_sizes: (
+        "xsmall"    :   0.5rem,
+        "small"     :   0.7rem,
+        "snormal"   :   0.85rem,
+        "normal"    :   1rem,
+        "regular"   :   1.3rem,
+        "medium"    :   1.6rem,
+        "large"     :   1.75rem,
+        "xlarge"    :   2.2rem,
+        "xxlarge"   :   2.6rem,
+        "big"       :   3.4rem,
+        "huge"      :   4rem,
+        "xhuge"     :   6rem,
+        "humongous" :   8rem,
+);
+// static
+@each $text_size_name, $text_size in $text_sizes {
+  .text-#{$text_size_name} {
+    font-size: $text_size !important;
+    line-height: 1;
+  }
+
+  .text-height-#{$text_size_name} {
+    line-height: $text_size !important;
+  }
+
+  .letter-spacing-#{$text_size_name} {
+    letter-spacing: calc(#{$text_size} / 10) !important;
+  }
+}
+// responsive
+@each $screen_size, $limit in $screen_sizes {
+  @each $text_size_name, $text_size in $text_sizes {
+
+    .text-#{$text_size_name}-#{$screen_size} {
+      @media #{$limit}{
+        font-size: $text_size !important;
+        line-height: 1;
+      }
+    }
+
+    .text-height-#{$text_size_name}-#{$screen_size} {
+      @media #{$limit}{
+        line-height: $text_size !important;
+      }
+    }
+
+  }
+}
+
+.ss-standard-icon, .ss-standard-icon.ss-standard-standard, [class^="ss-standard-"]:before, [class*=" ss-standard-"]:before, [class^="ss-standard-"].ss-standard-standard:before, [class*=" ss-standard-"].ss-standard-standard:before, [class^="ss-standard-"].right:after, [class*=" ss-standard-"].right:after, [class^="ss-standard-"].ss-standard-standard.right:after, [class*=" ss-standard-"].ss-standard-standard.right:after{
+  vertical-align: middle;
+}

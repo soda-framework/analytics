@@ -1,0 +1,444 @@
+//
+//
+// BLOCKS
+//
+//
+
+.relative{
+  position: relative;
+  z-index: 1;
+}
+.absolute{
+  @include absolute(0,auto,auto,0,1);
+  &.bottom{
+    @include absolute(auto,auto,0,0,1);
+  }
+}
+.fixed{
+  @include fixed(0,auto,auto,0,1);
+  &.bottom{
+    @include fixed(auto,auto,0,0,1);
+  }
+}
+.center{
+  @include center();
+}
+.y-center{
+  @include y-center();
+}
+.x-center{
+  @include x-center();
+}
+
+.display-block{
+  display: block !important;
+}
+.display-inline-block{
+  display: inline-block !important;
+}
+.window-width {
+  width: 100vw !important;
+}
+.window-height {
+  height: 100vh !important;
+}
+.full-height {
+  height: 100% !important;
+}
+.half-height {
+  height: 50% !important;
+}
+.full-width {
+  width: 100% !important;
+  margin: inherit !important;
+  max-width: 100% !important;
+}
+.half-width {
+  width: 50% !important;
+}
+
+.inline-middle {
+  font-size: 0;
+  > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.no-overflow {
+  overflow: hidden;
+}
+.overflow-x{
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.padding{
+  padding: 15px;
+}
+.padding-small{
+  padding: 9px;
+}
+.padding-top{
+  padding-top: 15px;
+}
+.padding-right{
+  padding-right: 15px;
+}
+.padding-bottom{
+  padding-bottom: 15px;
+}
+.padding-left{
+  padding-left: 15px;
+}
+.padding-lg{
+  padding: 20px;
+}
+
+
+.square {
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  overflow: hidden;
+  &.taller {
+    padding-bottom:130%;
+  }
+  &.wider {
+    padding-bottom: 50%;
+  }
+  &.medium {
+    padding-bottom: 75%;
+  }
+}
+
+.middle-outer {
+  display: table;
+  height: 100%;
+  width: 100%;
+  .middle-inner {
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
+    &.middle-top{
+      vertical-align: top;
+    }
+  }
+}
+
+.page-height {
+  height: calc(100vh - 85px);
+}
+
+.dialog-width {
+  max-width: 680px;
+}
+
+.bg-cover{
+  @include bg-cover();
+}
+.bg-contain{
+  @include bg-contain();
+}
+
+.bg-sprite-v{
+  background: center top / calc(100% - 1px) 200% no-repeat;
+  transition: background-position 0s !important;
+  &:hover{
+    background-position: center bottom;
+  }
+}
+.bg-sprite-h{
+  background: left center / 200% calc(100% - 1px) no-repeat;
+  transition: background-position 0s !important;
+  &:hover{
+    background-position: right center;
+  }
+}
+
+.right{
+  float: right;
+}
+
+.left{
+  float: left;
+}
+
+.bg-faded{
+  background-color: rgba(0,0,0,0.4);
+}
+.bg-faded-white{
+  background-color: rgba(255,255,255,0.4);
+}
+.bg-faded-blue {
+  background-color: rgba(8, 24, 44, 0.35);
+}
+
+.text-outline {
+  color: white;
+  @include textshadow(0.75px);
+}
+.bg-fade-up{
+  background: transparent; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(transparent, $black); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(transparent, $black); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(transparent, $black); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(transparent, $black); /* Standard syntax */
+}
+
+//
+//
+// TEXT
+//
+//
+.text-center {
+  text-align: center;
+}
+.text-right{
+  text-align: right;
+}
+.text-shadow {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.text-bottom {
+  display: inline-block;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+.text-middle {
+  vertical-align: middle;
+  display: inline-block;
+  font-size: 0 !important;
+  > * {
+    font-size: 1rem;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  &:before {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: -1px;
+  }
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-semibold {
+  font-weight: 500;
+}
+
+.text-nobold {
+  font-weight: normal;
+}
+
+.text-sentence {
+}
+
+.text-condense {
+  letter-spacing: -1px;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-underline {
+  text-decoration: underline !important;
+}
+.underline-hover:hover{
+  text-decoration: underline !important;
+}
+
+.text-center-block {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+.break-word,.break-word span{
+  word-break: break-word;
+  display: inline-block;
+  line-height: 1.5 !important;
+}
+
+.text-white-shadow {
+  color: white;
+  font-size: 100%;
+  line-height: 1.3em;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
+  text-transform: none;
+}
+
+
+
+//
+//
+// MISC
+//
+//
+[v-cloak] {
+  display: none;
+}
+
+a{
+  color:inherit !important;
+  color:inherit !important;
+  text-decoration: none !important;
+  &:hover{
+    color:inherit;
+    text-decoration: none !important;
+  }
+}
+
+.appear-on-load{
+  opacity: 0;
+  transition: opacity 1s;
+  &.loaded{
+    opacity: 1;
+  }
+}
+
+.pointer-none{
+  pointer-events: none;
+}
+.pointer-all{
+  pointer-events: all;
+}
+
+.hover-state{
+  .idle{
+    opacity:1;
+    transition: opacity $transition-delay;
+  }
+  .active{
+    opacity:0;
+    transition: opacity $transition-delay;
+  }
+  &:hover{
+    .idle{
+      opacity:0 !important;
+    }
+    .active{
+      opacity:1 !important;
+    }
+  }
+  &.inline-hover{
+    .idle{
+      display: inline-block;
+    }
+    &:hover{
+      .active{
+        display: inline-block !important;
+      }
+    }
+  }
+}
+
+.active-state{
+  .idle{
+    display: block;
+  }
+  .active{
+    display: none;
+  }
+  &.active{
+    .idle{
+      display: none !important;
+    }
+    .active{
+      display: block;
+    }
+  }
+}
+
+.circle{
+  border-radius: 50%;
+}
+
+button{
+  width: 100%;
+  margin:0;
+  height:100%;
+}
+
+.v-align {
+  width: 100%;
+  height: 100%;
+  display: table !important;
+  text-align: center;
+  //table-layout: fixed;
+  .v-align-inner {
+    width: 100%;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.table-layout{
+  table-layout: fixed;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.expand-touch {
+  padding: 5px;
+}
+
+.round {
+  border-radius: 100%;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.button:focus {
+  outline: 0;
+}
+.button-block{
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+}
+
+.columns.collapse {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.clear {
+  opacity: 0 !important;
+}
+
+.hover {
+  cursor: pointer;
+}
+
+
+.clearfix{
+  clear: both;
+}
