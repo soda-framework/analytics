@@ -2,11 +2,12 @@
 namespace Soda\Analytics\Providers;
 
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 use Soda\Analytics\Components\Inputs\DropdownVue;
 use Soda\Analytics\Components\SodaAnalytics;
 use Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Soda\Analytics\Controllers\AuthController;
 use Spatie\Analytics\AnalyticsClient;
 use Spatie\Analytics\AnalyticsClientFactory;
 use Spatie\Analytics\Exceptions\InvalidConfiguration;
@@ -46,12 +47,16 @@ class AnalyticsServiceProvider extends ServiceProvider
                 'permissions' => 'access-cms',
             ]);
             $menu['Soda Analytics']->addChild('Authenticate', [
-                'url'         => route('analytics.auth'),
+                'url'         => route('soda.analytics.auth'),
                 'icon'        => 'fa fa-cog',
                 'label'       => 'Authenticate',
                 'isCurrent'   => soda_request_is('analytics/auth*'),
                 'permissions' => 'access-cms',
             ]);
+        });
+
+        Auth::macro('validGoogle', function () {
+            return !AuthController::isExpired();
         });
     }
 
@@ -88,7 +93,7 @@ class AnalyticsServiceProvider extends ServiceProvider
             return AnalyticsClientFactory::createForConfig($analyticsConfig);
         });
 
-        $this->app->bind(Analytics::class, function () use ($analyticsConfig) {
+        $this->app->bind(SodaAnalytics::class, function () use ($analyticsConfig) {
             $this->guardAgainstInvalidConfiguration($analyticsConfig);
 
             $client = app(AnalyticsClient::class);
@@ -96,10 +101,10 @@ class AnalyticsServiceProvider extends ServiceProvider
             return new SodaAnalytics($client, $analyticsConfig['view_id']);
         });
 
-        $this->app->alias(Analytics::class, 'laravel-analytics');
+        $this->app->alias(SodaAnalytics::class, 'soda-analytics');
 
         // register aliases
-        AliasLoader::getInstance()->alias("Analytics", 'Spatie\Analytics\AnalyticsFacade');
+        AliasLoader::getInstance()->alias('Analytics', 'Soda\Analytics\Components\SodaAnalyticsFacade');
 
         $this->app['soda.form.registrar']->register('dropdown_vue',DropdownVue::class);
     }

@@ -17,12 +17,20 @@
             $client = new Google_Client();
             $client->setAuthConfig(config('soda.analytics.client_secret'));
             $client->setRedirectUri(route('analytics.auth.callback'));
-            $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
+            $client->addScope(Google_Service_Analytics::ANALYTICS_EDIT);
             $client->addScope("email");
             $client->addScope("profile");
-            $client->setAccessType("offline");
+            $client->setAccessType("online");
 
             return $client;
+        }
+
+        public static function isExpired(){
+            $googleToken = session('google-token');
+            if( ($googleToken['created'] + $googleToken['expires_in']) > time() ){
+                return false;
+            }
+            return true;
         }
 
         /**
@@ -58,16 +66,16 @@
                 $userInfo = $service->userinfo->get();
 
                 $user = User::where('google_id', $userInfo->id)->first();
-                // If no match, register the user.
-                if ( ! $user ) {
+                if ( ! $user ) { // If no match, new user.
                     $user = new User();
-                    $user->name = $userInfo->name;
-                    $user->google_id = $userInfo->id;
-                    $user->email = $userInfo->email;
-                    $user->refresh_token = $client->getRefreshToken();
-                    $user->code = $request->get('code');
-                    $user->save();
                 }
+
+                $user->name = $userInfo->name;
+                $user->google_id = $userInfo->id;
+                $user->email = $userInfo->email;
+                $user->refresh_token = $client->getRefreshToken();
+                $user->code = $request->get('code');
+                $user->save();
 
                 Auth::guard('soda-analytics')->login($user);
 

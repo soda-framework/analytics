@@ -3,6 +3,7 @@
 
     use Google_Client;
     use Google_Service_Analytics;
+    use Google_Service_Analytics_Webproperty;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Session;
     use Soda\Cms\Http\Controllers\BaseController;
@@ -32,12 +33,6 @@
             $client = new Google_Client();
             $client->setAccessToken($token);
 
-//            // check for expiry
-//            if( ($token->created + $token->expires_in) > time() ){
-//                $token = $client->fetchAccessTokenWithRefreshToken($user->refresh_token);
-//                Session::put('google-token', $token);
-//            }
-
             $client->fetchAccessTokenWithAuthCode($user->code);
 
             return $client;
@@ -65,6 +60,25 @@
                 $properties = $propertiesObject->getItems();
 
                 return $properties;
+            } catch (apiServiceException $e) {
+                print 'There was an Analytics API service error '
+                    . $e->getCode() . ':' . $e->getMessage();
+
+            } catch (apiException $e) {
+                print 'There was a general API error '
+                    . $e->getCode() . ':' . $e->getMessage();
+            }
+        }
+
+        public function CreateAccountProperty($accountID, $propertyName, $optParams = []) {
+            try {
+                $property = new Google_Service_Analytics_Webproperty();
+                $property->setName($propertyName);
+
+                $propertyObject = $this->analytics->management_webproperties->insert($accountID, $property, $optParams);
+                dd( $propertyObject );
+
+                return $propertyObject;
             } catch (apiServiceException $e) {
                 print 'There was an Analytics API service error '
                     . $e->getCode() . ':' . $e->getMessage();

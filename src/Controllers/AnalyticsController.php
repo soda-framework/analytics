@@ -4,7 +4,6 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Validator;
     use Soda\Analytics\Components\AnalyticsAccount;
-    use Soda\Analytics\Database\Models\Config;
     use Soda\Cms\Http\Controllers\BaseController;
 
     class AnalyticsController extends BaseController
@@ -44,17 +43,14 @@
                 return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
             }
 
-            $config = Config::find(1);
-            if( ! $config ){
-                $config = new Config();
-                $config->id = 1;
-            }
-
+            $config = \Analytics::config();
             $config->account_id = $request->input('account_id');
             $config->account_name = $request->input('account_name');
             $config->property_id = $request->input('property_id');
             $config->property_name = $request->input('property_name');
             $config->save();
+
+            return redirect(route('soda.analytics'));
         }
 
         public function postCreateAccount(Request $request) {
@@ -66,10 +62,13 @@
             }
 
             // Create new account in the API
+            // TODO: whitelist
+            dd($request->input('account_name'));
         }
 
         public function postCreateProperty(Request $request) {
             $validator = Validator::make($request->all(), [
+                'account_id' => 'required',
                 'property_name' => 'required',
             ]);
             if ( $validator->fails() ) {
@@ -77,5 +76,9 @@
             }
 
             // Create new property in the API
+            // TODO: whitelist
+            $analytics = new AnalyticsAccount();
+            $property = $analytics->CreateAccountProperty($request->input('account_id'), $request->input('property_name'));
+            dd($property);
         }
     }
