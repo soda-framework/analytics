@@ -1,8 +1,8 @@
 <?php
     use Illuminate\Support\Facades\Auth;
-    use Soda\Analytics\Components\AnalyticsAccount;
+    use Soda\Analytics\Components\GoogleAPI;
 
-    $config = Analytics::config();
+    $config = GoogleConfig::get();
 ?>
 
 @extends(soda_cms_view_path('layouts.inner'))

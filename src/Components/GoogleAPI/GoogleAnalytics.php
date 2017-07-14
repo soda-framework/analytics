@@ -1,41 +1,20 @@
 <?php
-    namespace Soda\Analytics\Components;
+    namespace Soda\Analytics\Components\GoogleAPI;
 
-    use Google_Client;
     use Google_Service_Analytics;
     use Google_Service_Analytics_Webproperty;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Session;
-    use Soda\Cms\Http\Controllers\BaseController;
+    use Soda\Analytics\Components\GoogleAPI;
 
-    class AnalyticsAccount extends BaseController
+    class GoogleAnalytics extends GoogleAPI
     {
-        /**
-         * @var $client to be authorized by Google.
-         */
-        private $client;
-
         /**
          * @var $analytics Analytics object to be used.
          */
-        private $analytics;
+        public $analytics;
 
         public function __construct() {
-            $this->client = $this->AuthenticateCurrentClient();
+            parent::__construct();
             $this->analytics = new Google_Service_Analytics($this->client);
-        }
-
-        private function AuthenticateCurrentClient() {
-            $user = Auth::guard('soda-analytics')->user();
-            $token = Session::get('google-token');
-
-            // Authenticate the client.
-            $client = new Google_Client();
-            $client->setAccessToken($token);
-
-            $client->fetchAccessTokenWithAuthCode($user->code);
-
-            return $client;
         }
 
         public function GetAccounts($optParams = []) {

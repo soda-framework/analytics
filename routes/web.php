@@ -4,6 +4,13 @@
 
             Route::get('/', '\Soda\Analytics\Controllers\AnalyticsController@anyIndex')->name('soda.analytics');
 
+            // CONFIGURE
+            Route::group(['prefix' => 'configure'], function () {
+                Route::get('/step-1', '\Soda\Analytics\Controllers\ConfigureController@anyStep1')->name('soda.analytics.configure.step-1');
+                Route::get('/step-2', '\Soda\Analytics\Controllers\ConfigureController@anyStep2')->name('soda.analytics.configure.step-2');
+                Route::post('/', '\Soda\Analytics\Controllers\ConfigureController@postConfigure')->name('soda.analytics.configure.post');
+            });
+
             // AUTH
             Route::group(['prefix' => 'auth'], function () {
                 Route::get('/', '\Soda\Analytics\Controllers\AuthController@redirectToProvider')->name('soda.analytics.auth');

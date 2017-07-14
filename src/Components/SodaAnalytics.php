@@ -10,22 +10,6 @@
 
     class SodaAnalytics extends Analytics {
 
-        protected $config;
-
-        public function setConfig(Config $config) {
-            $this->config = $config;
-
-            return $this;
-        }
-
-        public function config() {
-            if(!$this->config) {
-                $this->setConfig(Config::firstOrNew([]));
-            }
-
-            return $this->config;
-        }
-
         public function fetchEvents(Period $period, string $category = ''): Collection {
             $others = ['dimensions' => 'ga:eventCategory, ga:eventAction, ga:eventLabel'];
             if ( $category ) $others['filters'] = 'ga:eventCategory==' . $category;

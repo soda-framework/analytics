@@ -3,6 +3,7 @@
 
     use Google_Client;
     use Google_Service_Analytics;
+    use Google_Service_Iam;
     use Google_Service_Oauth2;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -15,9 +16,13 @@
         public static function googleClient() {
             // Create the client object and set the authorization configuration from JSON file.
             $client = new Google_Client();
-            $client->setAuthConfig(config('soda.analytics.client_secret'));
-            $client->setRedirectUri(route('analytics.auth.callback'));
+            $client->setClientId(\GoogleConfig::get()->client_id);
+            $client->setClientSecret(\GoogleConfig::get()->client_secret);
+            $client->setRedirectUri(route('soda.analytics.auth.callback'));
             $client->addScope(Google_Service_Analytics::ANALYTICS_EDIT);
+
+            $client->addScope(Google_Service_Iam::CLOUD_PLATFORM);
+
             $client->addScope("email");
             $client->addScope("profile");
             $client->setAccessType("online");
@@ -52,7 +57,7 @@
         public function handleProviderCallback(Request $request) {
             // Handle authorization flow from the server.
             if ( ! $request->has('code') ) {
-                return redirect('analytics.auth');
+                return redirect('soda.analytics.auth');
             } else {
 
                 // Authenticate the client, and get required informations.
@@ -79,7 +84,7 @@
 
                 Auth::guard('soda-analytics')->login($user);
 
-                return redirect(route('analytics'));
+                return redirect(route('soda.analytics'));
             }
 
         }

@@ -1,5 +1,5 @@
 <?php
-    $config = Analytics::config();
+    $config = \GoogleConfig::get();
 ?>
 
 @if( $config->property_id )
