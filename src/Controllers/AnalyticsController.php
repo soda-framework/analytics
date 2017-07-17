@@ -11,12 +11,6 @@
     class AnalyticsController extends BaseController
     {
         public function anyIndex() {
-//            $iam = new GoogleIam();
-//            $iam->CreateServiceAccountKey();
-//
-//            dd('woo');
-
-            return view('soda-analytics::cms.events');
             return view('soda-analytics::cms.index');
         }
 
@@ -56,6 +50,11 @@
             $config->account_name = $request->input('account_name');
             $config->property_id = $request->input('property_id');
             $config->property_name = $request->input('property_name');
+            $config->save();
+
+            $analytics = new GoogleAnalytics();
+            $view = $analytics->GetView($config->account_id, $config->property_id);
+            $config->view_id = $view->id;
             $config->save();
 
             return redirect(route('soda.analytics'));

@@ -42,25 +42,25 @@
                     'label'       => 'Soda Analytics',
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Step 1: Configure', [
-                    'url'         => route('soda.analytics.configure.step-1'),
+                $menu['Soda Analytics']->addChild('Configure', [
+                    'url'         => Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle() ? route('soda.analytics.configure') : route('soda.analytics.auth'),
                     'icon'        => 'fa fa-cog',
-                    'label'       => 'Step 1: Configure',
+                    'label'       => 'Configure',
                     'isCurrent'   => soda_request_is('analytics/configure*'),
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Step 2: Configure', [
-                    'url'         => route('soda.analytics.configure.step-2'),
+                $menu['Soda Analytics']->addChild('Audience', [
+                    'url'         => route('soda.analytics.audience'),
                     'icon'        => 'fa fa-cog',
-                    'label'       => 'Step 2: Configure',
-                    'isCurrent'   => soda_request_is('analytics/configure*'),
+                    'label'       => 'Audience',
+                    'isCurrent'   => soda_request_is('analytics/events*'),
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Step 3: Account & Property', [
-                    'url'         => Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle() ? route('soda.analytics') : route('soda.analytics.auth'),
+                $menu['Soda Analytics']->addChild('Events', [
+                    'url'         => route('soda.analytics.events'),
                     'icon'        => 'fa fa-cog',
-                    'label'       => 'Step 2: Account & Property',
-                    'isCurrent'   => soda_request_is('analytics/auth*'),
+                    'label'       => 'Events',
+                    'isCurrent'   => soda_request_is('analytics/events*'),
                     'permissions' => 'access-cms',
                 ]);
             });

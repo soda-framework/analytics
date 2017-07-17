@@ -22,7 +22,7 @@
         public function CreateServiceAccount($name) {
             try {
                 $serviceAccount = new Google_Service_Iam_ServiceAccount();
-                $serviceAccount->setDisplayName('Soda Analytics Service Account');
+                $serviceAccount->setDisplayName(config('soda.analytics.service-account-name'));
 
                 $accountRequest = new Google_Service_Iam_CreateServiceAccountRequest();
                 $accountRequest->setAccountId($name . '-' . hexdec(uniqid()));
@@ -41,22 +41,17 @@
             }
         }
 
-        public function CreateServiceAccountKey($serviceAccount=null) {
+        public function CreateServiceAccountKey($serviceAccountName) {
             try {
                 $accountRequest = new Google_Service_Iam_CreateServiceAccountKeyRequest();
                 $accountRequest->setIncludePublicKeyData(true);
 
-//                $serviceAccount = $this->iam->projects_serviceAccounts_keys->create($serviceAccount->getName(), $accountRequest);
-                $serviceAccount = $this->iam->projects_serviceAccounts_keys->create('projects/spotify-aami/serviceAccounts/spotify-aami-1572875469643774@spotify-aami.iam.gserviceaccount.com', $accountRequest);
+                $serviceAccount = $this->iam->projects_serviceAccounts_keys->create($serviceAccountName, $accountRequest);
 
                 $key = $serviceAccount->getPrivateKeyData();
                 $key = base64_decode($key);
 
-                $config = \GoogleConfig::get();
-                $config->service_account_credentials_json = $key;
-                $config->save();
-
-                return true;
+                return $key;
             } catch (apiServiceException $e) {
                 print 'There was an Analytics API service error '
                     . $e->getCode() . ':' . $e->getMessage();

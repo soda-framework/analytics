@@ -20,9 +20,8 @@
             $client->setClientSecret(\GoogleConfig::get()->client_secret);
             $client->setRedirectUri(route('soda.analytics.auth.callback'));
             $client->addScope(Google_Service_Analytics::ANALYTICS_EDIT);
-
+            $client->addScope(Google_Service_Analytics::ANALYTICS_MANAGE_USERS);
             $client->addScope(Google_Service_Iam::CLOUD_PLATFORM);
-
             $client->addScope("email");
             $client->addScope("profile");
             $client->setAccessType("online");

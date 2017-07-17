@@ -72,7 +72,7 @@ if ($('#analytics-index').length) {
 
                 me.reset_accounts();
 
-                axios.post('/cms/analytics/accounts', {
+                axios.post('/cms/analytics/configure/accounts', {
                         _token: meta('csrf-token'),
                     })
                     .then(function (response) {
@@ -85,7 +85,7 @@ if ($('#analytics-index').length) {
             post_new_account: function (account_name) {
                 var me = this;
 
-                axios.post('/cms/analytics/create-account', {
+                axios.post('/cms/analytics/configure/create-account', {
                         _token: meta('csrf-token'),
                         account_name: account_name
                     })
@@ -104,7 +104,7 @@ if ($('#analytics-index').length) {
 
                 me.reset_properties();
 
-                axios.post('/cms/analytics/account-properties', {
+                axios.post('/cms/analytics/configure/account-properties', {
                         _token: meta('csrf-token'),
                         account: me.account
                     })
@@ -118,7 +118,7 @@ if ($('#analytics-index').length) {
             post_new_property: function (property_name) {
                 var me = this;
 
-                axios.post('/cms/analytics/create-property', {
+                axios.post('/cms/analytics/configure/create-property', {
                         _token: meta('csrf-token'),
                         account: me.account,
                         property_name: property_name

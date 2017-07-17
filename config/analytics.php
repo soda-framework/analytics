@@ -45,5 +45,11 @@
                 'table'    => 'password_resets',
                 'expire'   => 60,
             ],
-        ]
+        ],
+
+        'apis' => [
+            'analytics.googleapis.com',
+            'iam.googleapis.com',
+        ],
+        'service-account-name' => 'Soda Analytics Service Account',
     ];
