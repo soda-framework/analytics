@@ -49,6 +49,7 @@
 
         'apis' => [
             'analytics.googleapis.com',
+            'analyticsreporting.googleapis.com',
             'iam.googleapis.com',
         ],
         'service-account-name' => 'Soda Analytics Service Account',

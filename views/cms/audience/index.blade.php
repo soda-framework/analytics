@@ -30,7 +30,6 @@ $logged_in = Auth::guard('soda-analytics')->check() && Auth::guard('soda-analyti
     </div>
 
     <div class="content-block">
-        {{ dd($visitors) }}
     </div>
 @endsection
 

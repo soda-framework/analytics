@@ -29,8 +29,9 @@
 
             // EVENTS
             Route::group(['prefix' => 'events'], function () {
-                Route::get('/', '\Soda\Analytics\Controllers\EventsController@anyIndex')->name('soda.analytics.events');
+                Route::get('/', '\Soda\Analytics\Controllers\EventsController@run')->name('soda.analytics.events');
             });
+            Route::get('/events-update', '\Soda\Analytics\Controllers\EventsController@anyUpdate')->name('soda.analytics.events.update');
 
             // AUDIENCE
             Route::group(['prefix' => 'audience'], function () {

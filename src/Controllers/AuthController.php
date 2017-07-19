@@ -3,6 +3,7 @@
 
     use Google_Client;
     use Google_Service_Analytics;
+    use Google_Service_AnalyticsReporting;
     use Google_Service_Iam;
     use Google_Service_Oauth2;
     use Illuminate\Http\Request;
@@ -19,6 +20,7 @@
             $client->setClientId(\GoogleConfig::get()->client_id);
             $client->setClientSecret(\GoogleConfig::get()->client_secret);
             $client->setRedirectUri(route('soda.analytics.auth.callback'));
+            $client->addScope(Google_Service_AnalyticsReporting::ANALYTICS);
             $client->addScope(Google_Service_Analytics::ANALYTICS_EDIT);
             $client->addScope(Google_Service_Analytics::ANALYTICS_MANAGE_USERS);
             $client->addScope(Google_Service_Iam::CLOUD_PLATFORM);

@@ -6,6 +6,10 @@
     use Google_Service_Analytics_EntityUserLinkPermissions;
     use Google_Service_Analytics_UserRef;
     use Google_Service_Analytics_Webproperty;
+    use Google_Service_AnalyticsReporting_DateRange;
+    use Google_Service_AnalyticsReporting_GetReportsRequest;
+    use Google_Service_AnalyticsReporting_Metric;
+    use Google_Service_AnalyticsReporting_ReportRequest;
     use Soda\Analytics\Components\GoogleAPI;
 
     class GoogleAnalytics extends GoogleAPI
@@ -16,7 +20,7 @@
         public $analytics;
 
         public function __construct() {
-            parent::__construct();
+            parent::__construct(GoogleAPI::ANALYTICS);
             $this->analytics = new Google_Service_Analytics($this->client);
         }
 

@@ -11,6 +11,8 @@
 
     class GoogleAPI extends BaseController
     {
+        const CLIENT = 1;
+        const ANALYTICS = 2;
         /**
          * @var $client to be authorized by Google.
          */
@@ -22,13 +24,16 @@
         public $analytics;
         public $iam;
 
-        public function __construct() {
-            $this->client = $this->AuthenticateCurrentClient();
-            $this->analytics = new Google_Service_Analytics($this->client);
-            $this->iam = new Google_Service_Iam($this->client);
+        public function __construct($type=GoogleAPI::CLIENT) {
+            if( $type == GoogleAPI::CLIENT ) {
+                $this->client = $this->AuthenticateCurrentClient();
+            }
+            else if ( $type == GoogleAPI::ANALYTICS ) {
+                $this->client = $this->AuthenticateAnalyticsClient();
+            }
         }
 
-        private function AuthenticateCurrentClient() {
+        protected function AuthenticateCurrentClient() {
             $user = Auth::guard('soda-analytics')->user();
             $token = Session::get('google-token');
 
@@ -37,6 +42,19 @@
             $client->setAccessToken($token);
 
             $client->fetchAccessTokenWithAuthCode($user->code);
+
+            return $client;
+        }
+
+        protected function AuthenticateAnalyticsClient() {
+            $config = \GoogleConfig::get();
+
+            // Authenticate the client.
+            $client = new Google_Client();
+            $client->setScopes([
+                Google_Service_Analytics::ANALYTICS_READONLY,
+            ]);
+            $client->setAuthConfig((array) json_decode($config->service_account_credentials_json));
 
             return $client;
         }

@@ -1,9 +1,11 @@
 <?php
-use Illuminate\Support\Facades\Auth;
-use Soda\Analytics\Components\GoogleAPI;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Request;
+    use Soda\Analytics\Components\GoogleAPI;
 
-$config = GoogleConfig::get();
-$logged_in = Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle();
+    $config = GoogleConfig::get();
+    $logged_in = Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle();
+
 ?>
 
 @extends(soda_cms_view_path('layouts.inner'))
@@ -11,28 +13,28 @@ $logged_in = Auth::guard('soda-analytics')->check() && Auth::guard('soda-analyti
 @section('breadcrumb')
     <ol class="breadcrumb" xmlns:v-on="http://www.w3.org/1999/xhtml">
         <li><a href="{{ route('soda.home') }}">Home</a></li>
-        <li class="active">Analytics</li>
+        <li>Analytics</li>
+        <li class="active">Events</li>
     </ol>
 @stop
 
 @section('head.title')
-    <title>Analytics</title>
+    <title>Analytics | Events</title>
 @endsection
 
 @include(soda_cms_view_path('partials.heading'), [
     'icon'        => 'fa fa-share-alt',
-    'title'       => 'Analytics > Auth',
+    'title'       => 'Analytics | Events',
 ])
 
 @section('content')
-    <div class="content-header">
-        <h2>Events</h2>
+    <div class="content-top">
+        {{--{!! $filter !!}--}}
+        <a href="{{ Request::url() }}">Clear</a>
     </div>
 
     <div class="content-block">
-        <pre>
-            {!! var_dump($events) !!}
-        </pre>
+        {!!  $grid  !!}
     </div>
 @endsection
 
