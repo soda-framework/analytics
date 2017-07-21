@@ -1,11 +1,13 @@
 <?php
     namespace Soda\Analytics\Providers;
 
+    use Illuminate\Events\Dispatcher;
     use Illuminate\Foundation\AliasLoader;
     use Illuminate\Support\Facades\Auth;
     use Soda\Analytics\Components\Inputs\DropdownVue;
     use Route;
     use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+    use Soda\Analytics\Console\Scheduler;
     use Soda\Analytics\Controllers\AuthController;
     use Soda\Analytics\Database\Models\Config;
 
@@ -51,16 +53,23 @@
                 ]);
                 $menu['Soda Analytics']->addChild('Audience', [
                     'url'         => route('soda.analytics.audience'),
-                    'icon'        => 'fa fa-cog',
+                    'icon'        => 'fa fa-users',
                     'label'       => 'Audience',
-                    'isCurrent'   => soda_request_is('analytics/events*'),
+                    'isCurrent'   => soda_request_is('analytics/audience*'),
                     'permissions' => 'access-cms',
                 ]);
                 $menu['Soda Analytics']->addChild('Events', [
                     'url'         => route('soda.analytics.events'),
-                    'icon'        => 'fa fa-cog',
+                    'icon'        => 'fa fa-tasks',
                     'label'       => 'Events',
                     'isCurrent'   => soda_request_is('analytics/events*'),
+                    'permissions' => 'access-cms',
+                ]);
+                $menu['Soda Analytics']->addChild('Scheduler', [
+                    'url'         => route('soda.analytics.scheduler'),
+                    'icon'        => 'fa fa-clock-o',
+                    'label'       => 'Scheduler',
+                    'isCurrent'   => soda_request_is('analytics/scheduler*'),
                     'permissions' => 'access-cms',
                 ]);
             });
@@ -100,6 +109,13 @@
             $this->app->singleton('soda-google-config', function () {
                 return Config::firstOrNew([]);
             });
+
+            // fire schedules
+            $this->app->singleton('soda-analytics-scheduler', function ($app) {
+                $dispatcher = $app->make(Dispatcher::class);
+                return new Scheduler($app, $dispatcher);
+            });
+            $this->app->make('soda-analytics-scheduler');
 
             AliasLoader::getInstance()->alias('GoogleConfig', 'Soda\Analytics\Components\SodaGoogleConfigFacade');
 

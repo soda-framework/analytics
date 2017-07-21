@@ -30,15 +30,28 @@
             // EVENTS
             Route::group(['prefix' => 'events'], function () {
                 Route::get('/', '\Soda\Analytics\Controllers\EventsController@run')->name('soda.analytics.events');
+                Route::post('/update', '\Soda\Analytics\Controllers\EventsController@anyUpdate')->name('soda.analytics.events.update');
+                Route::get('/export', '\Soda\Analytics\Controllers\EventsController@anyExport')->name('soda.analytics.events.export');
             });
-            Route::get('/events-update', '\Soda\Analytics\Controllers\EventsController@anyUpdate')->name('soda.analytics.events.update');
 
             // AUDIENCE
             Route::group(['prefix' => 'audience'], function () {
-                Route::get('/', '\Soda\Analytics\Controllers\AudienceController@anyIndex')->name('soda.analytics.audience');
+                Route::get('/', '\Soda\Analytics\Controllers\AudienceController@run')->name('soda.analytics.audience');
+                Route::post('/update', '\Soda\Analytics\Controllers\AudienceController@anyUpdate')->name('soda.analytics.audience.update');
+                Route::get('/export', '\Soda\Analytics\Controllers\AudienceController@anyExport')->name('soda.analytics.audience.export');
             });
 
-            // API
+            // SCHEDULER
+            Route::group(['prefix' => 'scheduler'], function () {
+                Route::get('/', '\Soda\Analytics\Controllers\ScheduleController@run')->name('soda.analytics.scheduler');
+                Route::get('/create', '\Soda\Analytics\Controllers\ScheduleController@anyCreate')->name('soda.analytics.scheduler.create');
+                Route::get('/update/{id}', '\Soda\Analytics\Controllers\ScheduleController@getUpdate')->name('soda.analytics.scheduler.update.get');
+                Route::post('/config-update', '\Soda\Analytics\Controllers\ScheduleController@postConfigUpdate')->name('soda.analytics.scheduler.config-update');
+                Route::post('/update', '\Soda\Analytics\Controllers\ScheduleController@postUpdate');
+                Route::post('/update/{id}', '\Soda\Analytics\Controllers\ScheduleController@postUpdate')->name('soda.analytics.scheduler.update.post');
+                Route::get('/delete/{id}', '\Soda\Analytics\Controllers\ScheduleController@anyDelete')->name('soda.analytics.scheduler.delete');
+                Route::get('/{id}', '\Soda\Analytics\Controllers\ScheduleController@anyIndex')->name('soda.analytics.scheduler.view');
+            });
 
 
         });

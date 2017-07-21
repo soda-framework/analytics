@@ -53,4 +53,13 @@
             'iam.googleapis.com',
         ],
         'service-account-name' => 'Soda Analytics Service Account',
+        'schedule' => [
+            'frequencies' => [
+                'daily',
+                'weekly',
+                'monthly',
+                'quarterly',
+                'yearly',
+            ]
+        ]
     ];
