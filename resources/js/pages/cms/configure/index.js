@@ -6,12 +6,12 @@ if ($('#configure').length) {
             disable_watchers: false,
             completed_steps: {
                 1: false, // project name
-                2: meta('logged_id') == 'true', // logged in
-                3: false, // enabled api's
-                4: false, // service_account_credentials_json
-                5: false, // account, property, view
-                6: false,
-                7: false,
+                2: false, // google login credentials
+                3: meta('logged_id') == 'true', // logged in
+                4: false, // enabled api's
+                5: false, // service_account_credentials_json
+                6: false, // account, property, view
+                7: false, // user permission added
             },
 
             account_id: 0,
@@ -97,17 +97,20 @@ if ($('#configure').length) {
                 if( me.config.project_name ){
                     me.completed_steps[1] = true;
                 }
-                if (me.config.apis_enabled) {
-                    me.completed_steps[3] = true;
+                if (me.config.client_id && me.config.client_secret) {
+                    me.completed_steps[2] = true;
                 }
-                if (me.config.service_account_credentials_json) {
+                if (me.config.apis_enabled) {
                     me.completed_steps[4] = true;
                 }
-                if ( me.config.account_id && me.config.property_id && me.config.view_id ) {
+                if (me.config.service_account_credentials_json) {
                     me.completed_steps[5] = true;
                 }
-                if ( me.config.analytics_user_added ) {
+                if ( me.config.account_id && me.config.property_id && me.config.view_id ) {
                     me.completed_steps[6] = true;
+                }
+                if ( me.config.analytics_user_added ) {
+                    me.completed_steps[7] = true;
                 }
             },
             completed_steps_up_to: function (step) {
@@ -129,6 +132,22 @@ if ($('#configure').length) {
                 axios.post('/cms/analytics/configure/project-name', {
                         _token: meta('csrf-token'),
                         project_name: project_name,
+                    })
+                    .then(function (response) {
+                        if (response.data.success) {
+                            me.config = response.data.config;
+                        }
+                    });
+            },
+
+            // Save Client Credentials
+            set_login_credentials: function (client_id, client_secret) {
+                var me = this;
+
+                axios.post('/cms/analytics/configure/login-credentials', {
+                        _token: meta('csrf-token'),
+                        client_id: client_id,
+                        client_secret: client_secret,
                     })
                     .then(function (response) {
                         if (response.data.success) {

@@ -5,7 +5,7 @@
             <li>
                 <a href="https://console.developers.google.com/projectcreate" target="_blank">Create</a>
                 or
-                <a href="https://console.developers.google.com/apis/library?project={{ $config->project_name }}"
+                <a :href="'https://console.developers.google.com/apis/library?project='+ config.project_name"
                    target="_blank">Choose</a>
                 a project on Google Console
             </li>

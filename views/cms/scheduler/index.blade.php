@@ -30,20 +30,18 @@
 ])
 
 @section('content')
-    <div class="content-top">
-        <form method="POST" action="{{ route('soda.analytics.scheduler.config-update') }}" enctype="multipart/form-data">
+    <div id="schedules" class="content-top">
+        <form id="schedule_frequency" method="POST" action="{{ route('soda.analytics.scheduler.config-update') }}" enctype="multipart/form-data">
             {!! csrf_field() !!}
 
             {!! app('soda.form')->dropdown([
                 "name"        => "Schedule Frequency",
                 "field_name"  => "schedule_frequency",
                 "description"  => "How frequent do you want emails to send to each of your schedules?",
-                "field_params" => ["options"=>$frequencies]
+                "field_params" => [
+                    "options"=>$frequencies,
+                ]
             ])->setModel($config)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
-
-            <button class="btn btn-primary">
-                Update
-            </button>
         </form>
 
         <h3>Cron Command:</h3>
@@ -52,7 +50,7 @@
         &nbsp;&nbsp;&nbsp;<code>{!! $cron !!} php /path/to/artisan soda-analytics:schedules 1>> /dev/null 2>&1</code>
         <br/>
         to your server (using the <code>crontab -e</code> command),
-        which will execute <code>php /path/to/artisan schedule:run</code> on a <b>{{ $frequency }}</b> basis.
+        which will execute <code>php /path/to/artisan soda-analytics:schedules</code> on a <b>{{ $frequency }}</b> basis.
     </div>
 
     <div class="content-block">

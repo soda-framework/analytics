@@ -114,6 +114,23 @@
             return response()->json(['success' => true, 'config' => $config]);
         }
 
+        public function postLoginCredentials(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'client_id' => 'required',
+                'client_secret' => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            $config = \GoogleConfig::get();
+            $config->client_id = $request->input('client_id');
+            $config->client_secret = $request->input('client_secret');
+            $config->save();
+
+            return response()->json(['success' => true, 'config' => $config]);
+        }
+
         public function postConfigure(Request $request) {
             $validator = Validator::make($request->all(), [
                 'project_name' => 'required',

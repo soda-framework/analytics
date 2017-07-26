@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -471,7 +471,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29)))
 
 /***/ }),
 /* 2 */
@@ -741,13 +741,14 @@ module.exports = function bind(fn, thisArg) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window.Vue = __webpack_require__(31);
+window.Vue = __webpack_require__(30);
 window.axios = __webpack_require__(9);
 window.bus = new Vue();
 
 __webpack_require__(27);
 //require('./pages/cms/index.js');
 __webpack_require__(28);
+__webpack_require__(36);
 
 /***/ }),
 /* 8 */
@@ -1617,12 +1618,12 @@ if ($('#configure').length) {
             disable_watchers: false,
             completed_steps: {
                 1: false, // project name
-                2: meta('logged_id') == 'true', // logged in
-                3: false, // enabled api's
-                4: false, // service_account_credentials_json
-                5: false, // account, property, view
-                6: false,
-                7: false
+                2: false, // google login credentials
+                3: meta('logged_id') == 'true', // logged in
+                4: false, // enabled api's
+                5: false, // service_account_credentials_json
+                6: false, // account, property, view
+                7: false // user permission added
             },
 
             account_id: 0,
@@ -1704,17 +1705,20 @@ if ($('#configure').length) {
                 if (me.config.project_name) {
                     me.completed_steps[1] = true;
                 }
-                if (me.config.apis_enabled) {
-                    me.completed_steps[3] = true;
+                if (me.config.client_id && me.config.client_secret) {
+                    me.completed_steps[2] = true;
                 }
-                if (me.config.service_account_credentials_json) {
+                if (me.config.apis_enabled) {
                     me.completed_steps[4] = true;
                 }
-                if (me.config.account_id && me.config.property_id && me.config.view_id) {
+                if (me.config.service_account_credentials_json) {
                     me.completed_steps[5] = true;
                 }
-                if (me.config.analytics_user_added) {
+                if (me.config.account_id && me.config.property_id && me.config.view_id) {
                     me.completed_steps[6] = true;
+                }
+                if (me.config.analytics_user_added) {
+                    me.completed_steps[7] = true;
                 }
             },
             completed_steps_up_to: function completed_steps_up_to(step) {
@@ -1736,6 +1740,21 @@ if ($('#configure').length) {
                 axios.post('/cms/analytics/configure/project-name', {
                     _token: meta('csrf-token'),
                     project_name: project_name
+                }).then(function (response) {
+                    if (response.data.success) {
+                        me.config = response.data.config;
+                    }
+                });
+            },
+
+            // Save Client Credentials
+            set_login_credentials: function set_login_credentials(client_id, client_secret) {
+                var me = this;
+
+                axios.post('/cms/analytics/configure/login-credentials', {
+                    _token: meta('csrf-token'),
+                    client_id: client_id,
+                    client_secret: client_secret
                 }).then(function (response) {
                     if (response.data.success) {
                         me.config = response.data.config;
@@ -1856,8 +1875,7 @@ if ($('#configure').length) {
 }
 
 /***/ }),
-/* 29 */,
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2047,7 +2065,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11743,10 +11761,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11773,12 +11791,34 @@ module.exports = g;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(7);
 module.exports = __webpack_require__(8);
 
+
+/***/ }),
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */
+/***/ (function(module, exports) {
+
+if ($('#schedules').length) {
+    var analytics_vm = new Vue({
+        el: '#schedules',
+        data: {},
+        mounted: function mounted() {
+            var me = this;
+
+            $('body').on('change', 'select[name=schedule_frequency]', function () {
+                $('form#schedule_frequency').submit();
+            });
+        },
+        methods: {}
+    });
+}
 
 /***/ })
 /******/ ]);

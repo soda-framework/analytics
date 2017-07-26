@@ -46,21 +46,18 @@
 
         @include('soda-analytics::cms.configure.steps.project-name',['step'=>1])
 
-        @include('soda-analytics::cms.configure.steps.login',['step'=>2])
+        @include('soda-analytics::cms.configure.steps.login-credentials',['step'=>2])
 
-        @include('soda-analytics::cms.configure.steps.apis',['step'=>3])
+        @include('soda-analytics::cms.configure.steps.login',['step'=>3])
 
-        @include('soda-analytics::cms.configure.steps.create-service-account-and-key',['step'=>4])
+        @include('soda-analytics::cms.configure.steps.apis',['step'=>4])
 
-        @include('soda-analytics::cms.configure.steps.analytics-account-property',['step'=>5])
+        @include('soda-analytics::cms.configure.steps.create-service-account-and-key',['step'=>5])
 
-        @include('soda-analytics::cms.configure.steps.analytics-user',['step'=>6])
+        @include('soda-analytics::cms.configure.steps.analytics-account-property',['step'=>6])
 
-        <div class="step-content">
-            <a href="{{ route('soda.analytics.audience') }}">
-                <button class="btn btn-primary">Start using Google Analytics</button>
-            </a>
-        </div>
+        @include('soda-analytics::cms.configure.steps.analytics-user',['step'=>7])
+
     </div>
 @endsection
 

@@ -41,9 +41,6 @@
             "description" => "JSON File provided after creating your Service Account Key",
             "field_params" => '{"allowedFileTypes":["text"],"allowedFileExtensions":["json"],"allowedPreviewTypes": ["image", "html", "video", "audio", "flash", "object"]}'
         ])->setModel($config)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
-
-
-
     </div>
 @endsection
 

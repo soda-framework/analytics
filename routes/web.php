@@ -21,6 +21,7 @@
                 Route::get('/add-analytics-user', '\Soda\Analytics\Controllers\ConfigureController@addAnalyticsUser')->name('soda.analytics.configure.add-analytics-user');
 
                 Route::post('/', '\Soda\Analytics\Controllers\ConfigureController@postConfigure')->name('soda.analytics.configure.post');
+                Route::post('/login-credentials', '\Soda\Analytics\Controllers\ConfigureController@postLoginCredentials')->name('soda.analytics.configure.login-credentials');
                 Route::post('/project-name', '\Soda\Analytics\Controllers\ConfigureController@postProjectName')->name('soda.analytics.configure.project-name');
                 Route::post('/accounts', '\Soda\Analytics\Controllers\ConfigureController@postAccounts')->name('soda.analytics.configure.accounts');
                 Route::post('/account-properties', '\Soda\Analytics\Controllers\ConfigureController@postAccountProperties')->name('soda.analytics.configure.accounts');

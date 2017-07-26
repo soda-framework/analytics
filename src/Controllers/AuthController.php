@@ -15,10 +15,11 @@
     class AuthController extends BaseController
     {
         public static function googleClient() {
+            $config = \GoogleConfig::get();
             // Create the client object and set the authorization configuration from JSON file.
             $client = new Google_Client();
-            $client->setClientId(\GoogleConfig::get()->client_id);
-            $client->setClientSecret(\GoogleConfig::get()->client_secret);
+            $client->setClientId($config->client_id);
+            $client->setClientSecret($config->client_secret);
             $client->setRedirectUri(route('soda.analytics.auth.callback'));
             $client->addScope(Google_Service_AnalyticsReporting::ANALYTICS);
             $client->addScope(Google_Service_Analytics::ANALYTICS_EDIT);
