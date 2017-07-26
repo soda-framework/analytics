@@ -25,7 +25,6 @@
   "require": {
     "php": ">=5.5.9",
     "laravel/framework": "~5.3",
-    "spatie/laravel-analytics": "^3.0",
     "google/apiclient": "^2.0"
   },
   "autoload": {
