@@ -17,8 +17,8 @@
 @section('breadcrumb')
     <ol class="breadcrumb" xmlns:v-on="http://www.w3.org/1999/xhtml">
         <li><a href="{{ route('soda.home') }}">Home</a></li>
-        <li>Analytics</li>
-        <li class="active">Events</li>
+        <li><a href="{{ route('soda.analytics.configure') }}">Analytics</a></li>
+        <li class="active"><a href="{{ route('soda.analytics.events') }}">Events</a></li>
     </ol>
 @stop
 
@@ -63,6 +63,11 @@
         <a href="{{route('soda.analytics.events.export',request()->getQueryString())}}" target="_blank">
             <div class="btn btn-primary">
                 Export to CSV
+            </div>
+        </a>
+        <a href="{{route('soda.analytics.scheduler.create-from-event',request()->query->all())}}">
+            <div class="btn btn-primary">
+                Create Schedule
             </div>
         </a>
     </div>

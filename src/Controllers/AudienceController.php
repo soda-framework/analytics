@@ -15,15 +15,12 @@
 
     class AudienceController extends AbstractReporter
     {
-
         public function query(Request $request) {
             $query = Audience::select('users', 'sessions', 'avg_session_duration');
             return $query;
         }
 
         public function run(Request $request) {
-
-            dd(app()[Schedule::class]);
             $grid = DataGrid::source($this->query($request));
             $grid->add('users', 'Users');
             $grid->add('sessions', 'Unique Users (Sessions)');
@@ -35,22 +32,29 @@
         }
 
         public function anyUpdate(Request $request){
+            AnalyticsController::updateDates($request);
             $config = \GoogleConfig::get();
-            $config->analytics_from = Carbon::createFromFormat('d/m/Y',$request->input('analytics_from'))->setTime(0,0,0)->toDateTimeString();
-            $config->analytics_to = Carbon::createFromFormat('d/m/Y',$request->input('analytics_to'))->setTime(0, 0, 0)->toDateTimeString();
-            $config->save();
+
+            $this->update($config->analytics_from, $config->analytics_to);
+
+            return redirect(route('soda.analytics.audience'));
+        }
+
+        public function update($from, $to = null) {
+            $from = (new Carbon($from))->format('Y-m-d');
+            $to = isset($to) ? (new Carbon($to))->format('Y-m-d') : Carbon::now()->format('Y-m-d');
 
             // delete old
             Audience::truncate();
 
             $reporting = new GoogleAudience();
-            $reports = $reporting->GetAudience((new Carbon($config->analytics_from))->format('Y-m-d'), (new Carbon($config->analytics_to))->format('Y-m-d'));
+            $reports = $reporting->GetAudience($from, $to);
             $reports = $reports->getReports();
 
             foreach ($reports as $report) {
                 $report = $reporting->formatResultsArray($report);
 
-                foreach($report as $metrics){
+                foreach ($report as $metrics) {
                     $audience = new Audience();
                     $audience->users = $metrics['ga:users'];
                     $audience->sessions = $metrics['ga:sessions'];
@@ -60,18 +64,18 @@
             }
 
             // TODO: handle multiple audience reports. Code above can create many, everywhere else is expecting only one (Audience::first())
-
-            return redirect(route('soda.analytics.audience'));
         }
 
-        public function anyExport(Request $request) {
+        public function anyExport(Request $request, $file_name=null) {
+            $file_name = $file_name ? $file_name : $this->exportFileName();
+
             $grid = DataGrid::source($this->query($request));
             $grid->add('users', 'Users');
             $grid->add('sessions', 'Unique Users (Sessions)');
             $grid->add('avg_session_duration', 'Average Session Duration');
 
             $as_excel = ['delimiter' => ',', 'enclosure' => '"', 'line_ending' => "\n"];
-            $fileResponse = $grid->buildCSV($this->exportFileName(), false, true, $as_excel);
+            $fileResponse = $grid->buildCSV($file_name, false, true, $as_excel);
 
             return $fileResponse;
         }

@@ -7,6 +7,7 @@
     use Soda\Analytics\Components\Inputs\DropdownVue;
     use Route;
     use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+    use Soda\Analytics\Console\Commands\Email;
     use Soda\Analytics\Console\Scheduler;
     use Soda\Analytics\Controllers\AuthController;
     use Soda\Analytics\Database\Models\Config;
@@ -38,6 +39,12 @@
             $this->app['config']->set('auth.guards.soda-analytics', $this->app->config->get('soda.analytics.auth.guard'));
             $this->app['config']->set('auth.passwords.soda-analytics', $this->app->config->get('soda.analytics.auth.password'));
 
+            if ( $this->app->runningInConsole() ) {
+                $this->commands([
+                    Email::class,
+                ]);
+            }
+
             app('soda.menu')->menu('sidebar', function ($menu) {
                 $menu->addItem('Soda Analytics', [
                     'icon'        => 'fa fa-share-alt',
@@ -45,7 +52,7 @@
                     'permissions' => 'access-cms',
                 ]);
                 $menu['Soda Analytics']->addChild('Configure', [
-                    'url'         => Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle() ? route('soda.analytics.configure') : route('soda.analytics.auth'),
+                    'url'         => route('soda.analytics.configure'),
                     'icon'        => 'fa fa-cog',
                     'label'       => 'Configure',
                     'isCurrent'   => soda_request_is('analytics/configure*'),
@@ -68,7 +75,7 @@
                 $menu['Soda Analytics']->addChild('Scheduler', [
                     'url'         => route('soda.analytics.scheduler'),
                     'icon'        => 'fa fa-clock-o',
-                    'label'       => 'Scheduler',
+                    'label'       => 'Schedules',
                     'isCurrent'   => soda_request_is('analytics/scheduler*'),
                     'permissions' => 'access-cms',
                 ]);
@@ -110,12 +117,15 @@
                 return Config::firstOrNew([]);
             });
 
-            // fire schedules
-            $this->app->singleton('soda-analytics-scheduler', function ($app) {
-                $dispatcher = $app->make(Dispatcher::class);
-                return new Scheduler($app, $dispatcher);
-            });
-            $this->app->make('soda-analytics-scheduler');
+//            // schedules
+//            if( config('soda.analytics.scheduler.override_default') ) {
+//                $this->app->singleton('soda-analytics-scheduler', function ($app) {
+//                    $dispatcher = $app->make(Dispatcher::class);
+//
+//                    return new Scheduler($app, $dispatcher);
+//                });
+//                $this->app->make('soda-analytics-scheduler');
+//            }
 
             AliasLoader::getInstance()->alias('GoogleConfig', 'Soda\Analytics\Components\SodaGoogleConfigFacade');
 

@@ -85,7 +85,7 @@
 
                 Auth::guard('soda-analytics')->login($user);
 
-                return redirect(route('soda.analytics'));
+                return redirect(route('soda.analytics.configure'));
             }
 
         }

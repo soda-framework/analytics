@@ -55,44 +55,49 @@
         }
 
         public function anyUpdate(Request $request) {
+            AnalyticsController::updateDates($request);
             $config = \GoogleConfig::get();
-            $config->analytics_from = Carbon::createFromFormat('d/m/Y', $request->input('analytics_from'))->setTime(0, 0, 0)->toDateTimeString();
-            $config->analytics_to = Carbon::createFromFormat('d/m/Y', $request->input('analytics_to'))->setTime(0, 0, 0)->toDateTimeString();
-            $config->save();
+
+            $this->update($config->analytics_from, $config->analytics_to);
+
+            return redirect(route('soda.analytics.events'));
+        }
+
+        public function update($from, $to = null) {
+            $from = (new Carbon($from))->format('Y-m-d');
+            $to = isset($to) ? (new Carbon($to))->format('Y-m-d') : Carbon::now()->format('Y-m-d');
 
             // delete old
             Event::truncate();
 
             $reporting = new GoogleEvents();
-            $reports = $reporting->GetEvents((new Carbon($config->analytics_from))->format('Y-m-d'), (new Carbon($config->analytics_to))->format('Y-m-d'));
+            $reports = $reporting->GetEvents($from, $to);
             $reports = $reports->getReports();
 
             foreach ($reports as $report) {
                 $report = $reporting->formatResultsArray($report);
 
-                foreach($report as $category => $categoryValue){
+                foreach ($report as $category => $categoryValue) {
                     foreach ($categoryValue as $action => $actionValue) {
                         foreach ($actionValue as $label => $labelValue) {
 
                             $event = new Event();
-                            $event->category = substr($category,0,100);
-                            $event->action = substr($action,0,100);
-                            $event->label = substr($label,0,100);
-                            $event->value = substr($labelValue['ga:eventValue'],0,100);
-                            $event->total = substr($labelValue['ga:totalEvents'],0,100);
-                            $event->unique = substr($labelValue['ga:uniqueEvents'],0,100);
+                            $event->category = substr($category, 0, 100);
+                            $event->action = substr($action, 0, 100);
+                            $event->label = substr($label, 0, 100);
+                            $event->value = substr($labelValue['ga:eventValue'], 0, 100);
+                            $event->total = substr($labelValue['ga:totalEvents'], 0, 100);
+                            $event->unique = substr($labelValue['ga:uniqueEvents'], 0, 100);
                             $event->save();
 
                         }
                     }
                 }
             }
-
-            return redirect(route('soda.analytics.events'));
         }
 
-        public function anyExport(Request $request) {
-            $config = \GoogleConfig::get();
+        public function anyExport(Request $request, $file_name = null) {
+            $file_name = $file_name ? $file_name : $this->exportFileName();
 
             $filter = DataFilter::source($this->query($request));
             $filter->add('category', 'Category', 'text');
@@ -100,6 +105,8 @@
             $filter->add('label', 'Label', 'text');
             $filter->submit('search');
             $filter->reset('reset');
+
+            $filter->action = 'search'; // fix for scheduler
 
             $grid = DataGrid::source($filter);
             $grid->add('category', 'Category');
@@ -112,7 +119,7 @@
             $filter->build();
             $as_excel = ['delimiter' => ',', 'enclosure' => '"', 'line_ending' => "\n"];
 
-            $fileResponse = $grid->buildCSV($this->exportFileName(), false, true, $as_excel);
+            $fileResponse = $grid->buildCSV($file_name, false, true, $as_excel);
 
             return $fileResponse;
         }

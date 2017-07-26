@@ -1,9 +1,12 @@
 <?php
     use Illuminate\Support\Facades\Auth;
     use Soda\Analytics\Components\GoogleAPI;
-    use Soda\Analytics\Database\Models\Schedule;
 
     $config = GoogleConfig::get();
+    $frequencies = config('soda.analytics.scheduler.frequencies');
+    $frequency = $config->schedule_frequency ? $frequencies[$config->schedule_frequency] : array_first($frequencies);
+    $cron = $config->schedule_frequency ? $config->schedule_frequency : array_first(array_keys($frequencies));
+
     $logged_in = Auth::guard('soda-analytics')->check() && Auth::guard('soda-analytics')->validGoogle();
 ?>
 
@@ -12,8 +15,8 @@
 @section('breadcrumb')
     <ol class="breadcrumb" xmlns:v-on="http://www.w3.org/1999/xhtml">
         <li><a href="{{ route('soda.home') }}">Home</a></li>
-        <li>Analytics</li>
-        <li class="active">Schedules</li>
+        <li><a href="{{ route('soda.analytics.configure') }}">Analytics</a></li>
+        <li class="active"><a href="{{ route('soda.analytics.scheduler') }}">Schedules</a></li>
     </ol>
 @stop
 
@@ -28,20 +31,28 @@
 
 @section('content')
     <div class="content-top">
-        <form method="POST" action="{{ route('soda.analytics.audience.update') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('soda.analytics.scheduler.config-update') }}" enctype="multipart/form-data">
             {!! csrf_field() !!}
 
             {!! app('soda.form')->dropdown([
                 "name"        => "Schedule Frequency",
                 "field_name"  => "schedule_frequency",
                 "description"  => "How frequent do you want emails to send to each of your schedules?",
-                "field_params" => ["options"=>config('soda.analytics.schedule.frequencies')]
+                "field_params" => ["options"=>$frequencies]
             ])->setModel($config)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
 
             <button class="btn btn-primary">
                 Update
             </button>
         </form>
+
+        <h3>Cron Command:</h3>
+        To start the scheduler, add the following <b>cron job</b>:
+        <br/>
+        &nbsp;&nbsp;&nbsp;<code>{!! $cron !!} php /path/to/artisan soda-analytics:schedules 1>> /dev/null 2>&1</code>
+        <br/>
+        to your server (using the <code>crontab -e</code> command),
+        which will execute <code>php /path/to/artisan schedule:run</code> on a <b>{{ $frequency }}</b> basis.
     </div>
 
     <div class="content-block">

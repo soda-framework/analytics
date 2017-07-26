@@ -91,6 +91,29 @@
             return redirect(route('soda.analytics'));
         }
 
+
+        /**
+         * @param Request $request
+         *
+         * @return \Illuminate\Http\JsonResponse
+         *
+         * Update the Project Name
+         */
+        public function postProjectName(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'project_name' => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            $config = \GoogleConfig::get();
+            $config->project_name = $request->input('project_name');
+            $config->save();
+
+            return response()->json(['success' => true, 'config' => $config]);
+        }
+
         public function postConfigure(Request $request) {
             $validator = Validator::make($request->all(), [
                 'project_name' => 'required',
@@ -104,5 +127,98 @@
             $config->save();
 
             return redirect(route('soda.analytics'));
+        }
+
+
+        // ACCOUNTS/ PROPERTIES
+        public function postAccounts() {
+            $analytics = new GoogleAnalytics();
+            $accounts = $analytics->GetAccounts();
+            $accounts = collect($accounts)->sortBy('name')->pluck('name', 'id')->toArray();
+
+            return response()->json(['success' => true, 'accounts' => $accounts]);
+        }
+
+        public function postAccountProperties(Request $request) {
+            if ( $request->has('account_id') ) {
+                $analytics = new GoogleAnalytics();
+                $properties = $analytics->GetAccountProperties($request->input('account_id'));
+                $properties = collect($properties)->sortBy('name')->pluck('name', 'id')->toArray();
+
+                return response()->json(['success' => true, 'properties' => $properties]);
+            }
+
+            return response()->json(['success' => false, 'properties' => []]);
+        }
+
+        public function postSaveAccount(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'account_id'    => 'required',
+                'account_name'  => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            $config = \GoogleConfig::get();
+            $config->account_id = $request->input('account_id');
+            $config->account_name = $request->input('account_name');
+            $config->save();
+
+            return response()->json(['success' => true, 'config' => $config]);
+        }
+
+        public function postSaveProperty(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'property_id'   => 'required',
+                'property_name' => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            $config = \GoogleConfig::get();
+            $config->property_id = $request->input('property_id');
+            $config->property_name = $request->input('property_name');
+            $config->save();
+
+            $analytics = new GoogleAnalytics();
+            $view = $analytics->GetView($config->account_id, $config->property_id);
+            $config->view_id = $view->id;
+            $config->save();
+
+            return response()->json(['success' => true, 'config' => $config]);
+        }
+
+        public function postCreateAccount(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'account_name' => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            // Create new account in the API
+            $analytics = new GoogleAnalytics();
+            $account = $analytics->CreateAccount($request->input('account_name'));
+            dd($account);
+
+            return response()->json(['success' => true]);
+        }
+
+        public function postCreateProperty(Request $request) {
+            $validator = Validator::make($request->all(), [
+                'account_id'    => 'required',
+                'property_name' => 'required',
+            ]);
+            if ( $validator->fails() ) {
+                return response()->json(['success' => false, 'message' => $validator->messages()->first()]);
+            }
+
+            // Create new property in the API
+            $analytics = new GoogleAnalytics();
+            $property = $analytics->CreateAccountProperty($request->input('account_id'), $request->input('property_name'));
+
+            return response()->json(['success' => true, 'property_id' => $property->id]);
         }
     }

@@ -16,8 +16,8 @@
 @section('breadcrumb')
     <ol class="breadcrumb" xmlns:v-on="http://www.w3.org/1999/xhtml">
         <li><a href="{{ route('soda.home') }}">Home</a></li>
-        <li>Analytics</li>
-        <li class="active">Audience</li>
+        <li><a href="{{ route('soda.analytics.configure') }}">Analytics</a></li>
+        <li class="active"><a href="{{ route('soda.analytics.audience') }}">Audience</a></li>
     </ol>
 @stop
 

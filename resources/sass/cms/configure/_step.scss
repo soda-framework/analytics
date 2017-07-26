@@ -1,0 +1,37 @@
+.step{
+  display: block;
+  border: 2px solid $gray-light;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+
+  h3{
+    margin: 0 0 5px;
+  }
+
+  .edit-step {
+    opacity: 0.5;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: $gray-light;
+    &:hover {
+      color: $black;
+    }
+  }
+
+  &.completed{
+    .step-content {
+      display: none;
+    }
+
+    &:after{
+      content: "COMPLETE";
+    }
+
+    .edit-step {
+      opacity: 1;
+    }
+  }
+}

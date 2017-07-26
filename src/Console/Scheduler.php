@@ -8,6 +8,16 @@
     use Soda\Analytics\Database\Models\Schedule as AnalyticsSchedule;
 
     class Scheduler extends ConsoleKernel {
+
+        /**
+         * The Artisan commands provided by your application.
+         *
+         * @var array
+         */
+        protected $commands = [
+            'Soda\Analytics\Console\Commands\Email'
+        ];
+
         /**
          * Define the application's command schedule.
          *

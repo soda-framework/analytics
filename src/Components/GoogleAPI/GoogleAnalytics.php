@@ -63,6 +63,25 @@
             }
         }
 
+        public function CreateAccount($accountName) {
+            try {
+                //TODO: Wait for google to update the api
+                $account = new \Google_Service_Analytics_Account();
+                $account->setName($accountName);
+
+                $account = $this->analytics->management_accounts->insert($accountName);
+
+                return $account;
+            } catch (apiServiceException $e) {
+                print 'There was an Analytics API service error '
+                    . $e->getCode() . ':' . $e->getMessage();
+
+            } catch (apiException $e) {
+                print 'There was a general API error '
+                    . $e->getCode() . ':' . $e->getMessage();
+            }
+        }
+
         public function GetAccountProperties($accountID, $optParams = []) {
             try {
                 $propertiesObject = $this->analytics->management_webproperties->listManagementWebproperties($accountID, $optParams);
@@ -102,7 +121,7 @@
             $viewObjects = $this->analytics->management_profiles->listManagementProfiles($accountID, $propertyID, $optParams);
             $viewObjects = $viewObjects->getItems();
 
-            // Find where name is All Website Data
+            // Find where name is All Web Site Data
             $viewObject = array_filter(
                 $viewObjects,
                 function ($e) {

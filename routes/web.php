@@ -3,6 +3,7 @@
         Route::group(['prefix' => 'analytics'], function(){
 
             Route::get('/', '\Soda\Analytics\Controllers\AnalyticsController@anyIndex')->name('soda.analytics');
+            Route::post('/config', '\Soda\Analytics\Controllers\AnalyticsController@postConfig')->name('soda.analytics.config');
 
             // AUTH
             Route::group(['prefix' => 'auth'], function () {
@@ -20,11 +21,13 @@
                 Route::get('/add-analytics-user', '\Soda\Analytics\Controllers\ConfigureController@addAnalyticsUser')->name('soda.analytics.configure.add-analytics-user');
 
                 Route::post('/', '\Soda\Analytics\Controllers\ConfigureController@postConfigure')->name('soda.analytics.configure.post');
-                Route::post('/accounts', '\Soda\Analytics\Controllers\AnalyticsController@postAccounts')->name('soda.analytics.configure.accounts');
-                Route::post('/account-properties', '\Soda\Analytics\Controllers\AnalyticsController@postAccountProperties')->name('soda.analytics.configure.accounts');
-                Route::post('/submit-account-property', '\Soda\Analytics\Controllers\AnalyticsController@postSubmitAccountProperty')->name('soda.analytics.configure.submit-account-property');
-                Route::post('/create-account', '\Soda\Analytics\Controllers\AnalyticsController@postCreateAccount')->name('soda.analytics.configure.create-account');
-                Route::post('/create-property', '\Soda\Analytics\Controllers\AnalyticsController@postCreateProperty')->name('soda.analytics.configure.create-property');
+                Route::post('/project-name', '\Soda\Analytics\Controllers\ConfigureController@postProjectName')->name('soda.analytics.configure.project-name');
+                Route::post('/accounts', '\Soda\Analytics\Controllers\ConfigureController@postAccounts')->name('soda.analytics.configure.accounts');
+                Route::post('/account-properties', '\Soda\Analytics\Controllers\ConfigureController@postAccountProperties')->name('soda.analytics.configure.accounts');
+                Route::post('/create-account', '\Soda\Analytics\Controllers\ConfigureController@postCreateAccount')->name('soda.analytics.configure.create-account');
+                Route::post('/create-property', '\Soda\Analytics\Controllers\ConfigureController@postCreateProperty')->name('soda.analytics.configure.create-property');
+                Route::post('/save-account', '\Soda\Analytics\Controllers\ConfigureController@postSaveAccount')->name('soda.analytics.configure.save-account');
+                Route::post('/save-property', '\Soda\Analytics\Controllers\ConfigureController@postSaveProperty')->name('soda.analytics.configure.save-property');
             });
 
             // EVENTS
@@ -45,6 +48,8 @@
             Route::group(['prefix' => 'scheduler'], function () {
                 Route::get('/', '\Soda\Analytics\Controllers\ScheduleController@run')->name('soda.analytics.scheduler');
                 Route::get('/create', '\Soda\Analytics\Controllers\ScheduleController@anyCreate')->name('soda.analytics.scheduler.create');
+                Route::get('/create-event', '\Soda\Analytics\Controllers\ScheduleController@anyCreateFromEvent')->name('soda.analytics.scheduler.create-from-event');
+                Route::get('/run/{id}', '\Soda\Analytics\Controllers\ScheduleController@runSchedule')->name('soda.analytics.scheduler.run');
                 Route::get('/update/{id}', '\Soda\Analytics\Controllers\ScheduleController@getUpdate')->name('soda.analytics.scheduler.update.get');
                 Route::post('/config-update', '\Soda\Analytics\Controllers\ScheduleController@postConfigUpdate')->name('soda.analytics.scheduler.config-update');
                 Route::post('/update', '\Soda\Analytics\Controllers\ScheduleController@postUpdate');

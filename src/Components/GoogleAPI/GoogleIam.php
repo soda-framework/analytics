@@ -6,6 +6,7 @@
     use Google_Service_Iam_CreateServiceAccountRequest;
     use Google_Service_Iam_ServiceAccount;
     use Soda\Analytics\Components\GoogleAPI;
+    use Soda\Cms\Support\Facades\Soda;
 
     class GoogleIam extends GoogleAPI
     {
@@ -22,7 +23,7 @@
         public function CreateServiceAccount($name) {
             try {
                 $serviceAccount = new Google_Service_Iam_ServiceAccount();
-                $serviceAccount->setDisplayName(config('soda.analytics.service-account-name'));
+                $serviceAccount->setDisplayName(config('soda.analytics.service-account-name') . ': ' . Soda::getApplication()->name);
 
                 $accountRequest = new Google_Service_Iam_CreateServiceAccountRequest();
                 $accountRequest->setAccountId($name . '-' . hexdec(uniqid()));

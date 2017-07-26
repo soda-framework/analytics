@@ -1,5 +1,5 @@
 <?php
-    $config = GoogleConfig::get();
+    $model = isset($model) ? $model : GoogleConfig::get();
 ?>
 
 <div class="dates row">
@@ -13,15 +13,17 @@
             "field_params" => ["options"=>[
                 "format" => "DD/MM/YYYY"
             ]]
-        ])->setModel($config)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
+        ])->setModel($model)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
     </div>
     <div class="col-xs-12 col-sm-6">
         {!! app('soda.form')->datetime([
             "name"        => "To",
             "field_name"  => 'analytics_to',
             "field_params" => ["options"=>[
-                "format" => "DD/MM/YYYY"
-            ]]
-        ])->setModel($config)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
+                "format" => "DD/MM/YYYY",
+                "showClear" => true
+            ]],
+            "description" => "Leaving blank will use the current time whenever this schedule is run."
+        ])->setModel($model)->setLayout(soda_cms_view_path('partials.inputs.layouts.stacked')) !!}
     </div>
 </div>
