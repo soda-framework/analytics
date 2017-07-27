@@ -1,7 +1,7 @@
 # Soda Analytics
 A sweet integration with Google Analytics into the Soda Framework
 
-##Installation
+## Installation
 1) Firstly follow the instructions to install Soda CMS at:
 https://github.com/soda-framework/cms
 
@@ -28,15 +28,15 @@ composer require soda-framework/analytics
 @include('soda-analytics::analytics')
 ```
 
-##Configuration
+## Configuration
 * Log into the CMS
 * Go to Analytics > Configure
 * Complete all the steps, in order, to enable and create the relevant apis and access keys.
 * You're ready. Start using Analytics > Audience, Events, Schedules.
 
-##Usage
+## Usage
 
-###Sending Events
+### Sending Events
 Send events as normal with Google Analytics:
 ```!#javascript
 ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject]);
@@ -47,15 +47,15 @@ send_event([eventCategory], [eventAction], [eventLabel] (optional), [eventValue]
 ```
 For best results, try to use all the parameters.
 
-###Analyzing Events
+### Analyzing Events
 * Log into the CMS
 * Go to Analytics > Events
 
-###Analyzing Audience
+### Analyzing Audience
 * Log into the CMS
 * Go to Analytics > Audience
 
-###Creating Schedules
+### Creating Schedules
 * Log into the CMS
 * Go to Analytics > Schedules
 * Choose your desired schedule frequency (the same frequency is used for all schedules)
