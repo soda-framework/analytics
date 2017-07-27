@@ -8,7 +8,7 @@ https://github.com/soda-framework/cms
 
 2) Install Soda Analytics with composer
 ```
-#!unix
+#!bash
 composer require soda-framework/analytics
 ```
 
