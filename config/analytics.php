@@ -1,5 +1,10 @@
 <?php
     return [
+        'apis' => [
+            'analytics.googleapis.com',
+            'analyticsreporting.googleapis.com',
+            'iam.googleapis.com',
+        ],
         'auth' => [
             'provider' => [
                 'driver' => 'eloquent',
@@ -16,14 +21,7 @@
                 'expire'   => 60,
             ],
         ],
-        'apis' => [
-            'analytics.googleapis.com',
-            'analyticsreporting.googleapis.com',
-            'iam.googleapis.com',
-        ],
-        'service-account-name' => 'Soda Analytics Service Account',
         'scheduler' => [
-            'override_default' => true,
             'frequencies' => [
                 '0 0 0 1/1 * ? *'     => 'Daily',
                 '0 0 0 ? * MON *'     => 'Weekly',
@@ -31,5 +29,6 @@
                 '0 0 0 ? 1/3 MON#1 *' => 'Quarterly',
                 '0 0 0 1 1 ? *'       => 'Yearly',
             ]
-        ]
+        ],
+        'service-account-name' => 'Soda Analytics Service Account'
     ];

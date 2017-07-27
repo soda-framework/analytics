@@ -14,3 +14,6 @@
         ga('send', 'pageview');
     </script>
 @endif
+
+{{--Helper Functions--}}
+<script src="/soda/analytics/js/analytics.js"></script>
