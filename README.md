@@ -1,96 +1,68 @@
-# Soda Voting
-A sweet suite for sweet developers.
+# Soda Analytics
+A sweet integration with Google Analytics into the Soda Framework
 
-###Installation
+##Installation
 1) Firstly follow the instructions to install Soda CMS at:
 https://github.com/soda-framework/cms
 
 
-2) Apply these changes to your `composer.json` file and running a composer update
+2) Install Soda Analytics with composer
 ```
-#!json
-
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "git@bitbucket.org:made-in-katana/mik-site.git"
-    }
-],
-"require": { 
-    "soda-framework/cms": "^0.5.7",
-    "mik/site": "^0.2.0",
-},
+#!unix
+composer require soda-framework/analytics
 ```
 
-3) Integrate into laravel by adding `Soda\Site\Providers\SiteServiceProvider::class`
-in the providers array in `/config/app.php`
-```
-    'providers' => [
-        Soda\Providers\SodaServiceProvider::class,
-        Soda\Site\Providers\SiteServiceProvider::class,
-    ]
+3) Add `Soda\Analytics\Providers\AnalyticsServiceProvider::class`
+
+4) Run `php artisan vendor:publish`
+
+5) Run `php artisan migrate`
+
+6) Modify `config/soda/analytics.php` according to your needs:
+* `apis` - Google Console API's Soda Analytics requires
+* `service-account-name` - The name of the Service Account created for [Using OAuth 2.0 for Server to Server Applications](https://developers.google.com/identity/protocols/OAuth2ServiceAccount)
+* `scheduler` - available cron job intervals for the Analytics scheduler
+
+7) Add the following Laravel Blade code to your `<head>` to initialize Google Analytics:
+```#!php
+@include('soda-analytics::analytics')
 ```
 
-4) Run the database migrations `php artisan migrate` to generate the necessary tables
+##Configuration
+* Log into the CMS
+* Go to Analytics > Configure
+* Complete all the steps, in order, to enable and create the relevant apis and access keys.
+* You're ready. Start using Analytics > Audience, Events, Schedules.
 
 ##Usage
 
-###Social Sharing Meta Data
-Include this code in your <head>
+###Sending Events
+Send events as normal with Google Analytics:
+```!#javascript
+ga('send', 'event', [eventCategory], [eventAction], [eventLabel], [eventValue], [fieldsObject]);
 ```
-#!php
-@include('mik-site::head')
+Or use our helper function:
+```!#javascript
+send_event([eventCategory], [eventAction], [eventLabel] (optional), [eventValue] (optional));
 ```
-This will include Facebook and Twitter meta data used when sharing any links on this sites domain.
-They can be altered in the CMS, Site > Socials
+For best results, try to use all the parameters.
 
-To include the SS Standard/Circle fonts, include this in your footer
+###Analyzing Events
+* Log into the CMS
+* Go to Analytics > Events
 
-```
-#!php
-@include('mik-site::ss-fonts')
-```
+###Analyzing Audience
+* Log into the CMS
+* Go to Analytics > Audience
 
+###Creating Schedules
+* Log into the CMS
+* Go to Analytics > Schedules
+* Choose your desired schedule frequency (the same frequency is used for all schedules)
+* Enter the displayed `cron` command onto your server (using the `crontab -e` command)
+* Create a new schedule
+* Choose the type. Event will send event data, Audience, audience data, Events and Audience will send both.
+* Enter at least one email to send the report to.
+* Click save.
+* You can test your schedule by clicking `Run Schedule`
 
-###Styling Helpers
-In this suite is a set of sweet CSS/SASS helper classes/functions.
-They must be manually imported into your SCSS.
-```
-#!scss
-@import "../../../../../vendor/mik/site/resources/scss/styles";
-```
-
-There is also a set of colour classes defined in this suite as defined below:
-```
-#!scss
-$colours: (
-    "clear" : transparent,
-    "black" : #000000,
-    "white" : #FFFFFF,
-);
-```
-which **NEEDS** to be defined before including the main SASS file above.
-These will create a set of classes that will apply colour changes to their elements.
-```
-.text-COLOUR
-.text-hover-COLOUR
-.bg-COLOUR
-.bg-hover-COLOUR
-.border-COLOUR
-.border-hover-COLOUR
-```
-All of these classes can also be applied for different the different **bootstrap** screen sizes:
-```
-.text-COLOUR-xs-up
-.text-COLOUR-sm-up
-.text-COLOUR-md-up
-.text-COLOUR-lg-up
-```
-*they are only UP to enforce mobile first development*
-
-
-###JavaScript Helpers
-In this suite is a set of sweet JS helper functions/commands.
-Only way to use this is to include this file inside another using WebPack.
-
-TODO: publish js to public folder
