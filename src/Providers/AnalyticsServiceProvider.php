@@ -46,33 +46,33 @@
             }
 
             app('soda.menu')->menu('sidebar', function ($menu) {
-                $menu->addItem('Soda Analytics', [
+                $menu->addItem('Analytics', [
                     'icon'        => 'fa fa-share-alt',
                     'label'       => 'Soda Analytics',
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Configure', [
+                $menu['Analytics']->addChild('Configure', [
                     'url'         => route('soda.analytics.configure'),
                     'icon'        => 'fa fa-cog',
                     'label'       => 'Configure',
                     'isCurrent'   => soda_request_is('analytics/configure*'),
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Audience', [
+                $menu['Analytics']->addChild('Audience', [
                     'url'         => route('soda.analytics.audience'),
                     'icon'        => 'fa fa-users',
                     'label'       => 'Audience',
                     'isCurrent'   => soda_request_is('analytics/audience*'),
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Events', [
+                $menu['Analytics']->addChild('Events', [
                     'url'         => route('soda.analytics.events'),
                     'icon'        => 'fa fa-tasks',
                     'label'       => 'Events',
                     'isCurrent'   => soda_request_is('analytics/events*'),
                     'permissions' => 'access-cms',
                 ]);
-                $menu['Soda Analytics']->addChild('Scheduler', [
+                $menu['Analytics']->addChild('Scheduler', [
                     'url'         => route('soda.analytics.scheduler'),
                     'icon'        => 'fa fa-clock-o',
                     'label'       => 'Schedules',

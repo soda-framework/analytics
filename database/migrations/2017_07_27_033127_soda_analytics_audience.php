@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSiteSettings extends Migration
+class SodaAnalyticsAudience extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class CreateSiteSettings extends Migration
      */
     public function up()
     {
-        Schema::create('site_settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('ga_id')->nullable();
-            $table->string('fb_id')->nullable();
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -28,6 +23,6 @@ class CreateSiteSettings extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('site_settings');
+        //
     }
 }
