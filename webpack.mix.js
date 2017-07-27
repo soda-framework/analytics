@@ -12,8 +12,8 @@ const { mix } = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+   .js('resources/js/app/analytics.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
-   .copy('public/','../../spotify-virginsa/src/public/soda/analytics/',true)
    .options({
        processCssUrls: false
    });

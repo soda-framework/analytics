@@ -117,16 +117,6 @@
                 return Config::firstOrNew([]);
             });
 
-//            // schedules
-//            if( config('soda.analytics.scheduler.override_default') ) {
-//                $this->app->singleton('soda-analytics-scheduler', function ($app) {
-//                    $dispatcher = $app->make(Dispatcher::class);
-//
-//                    return new Scheduler($app, $dispatcher);
-//                });
-//                $this->app->make('soda-analytics-scheduler');
-//            }
-
             AliasLoader::getInstance()->alias('GoogleConfig', 'Soda\Analytics\Components\SodaGoogleConfigFacade');
 
             $this->app['soda.form.registrar']->register('dropdown_vue', DropdownVue::class);
