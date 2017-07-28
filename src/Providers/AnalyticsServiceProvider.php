@@ -48,7 +48,7 @@
             app('soda.menu')->menu('sidebar', function ($menu) {
                 $menu->addItem('Analytics', [
                     'icon'        => 'fa fa-share-alt',
-                    'label'       => 'Soda Analytics',
+                    'label'       => 'Analytics',
                     'permissions' => 'access-cms',
                 ]);
                 $menu['Analytics']->addChild('Configure', [

@@ -4,6 +4,7 @@
             'analytics.googleapis.com',
             'analyticsreporting.googleapis.com',
             'iam.googleapis.com',
+            'servicemanagement.googleapis.com'
         ],
         'auth' => [
             'provider' => [

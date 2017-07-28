@@ -11,9 +11,17 @@ class SodaAnalyticsUsers extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        //
+    public function up() {
+        Schema::create('soda_analytics_users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('google_id',100)->nullable();
+            $table->string('email')->nullable();
+            $table->string('refresh_token')->nullable();
+            $table->string('code')->nullable();
+            $table->timestamps();
+            $table->dateTime('last_loggedin_at')->nullable();
+        });
     }
 
     /**
@@ -21,8 +29,7 @@ class SodaAnalyticsUsers extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        //
+    public function down() {
+        Schema::dropIfExists('soda_analytics_users');
     }
 }

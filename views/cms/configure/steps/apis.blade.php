@@ -1,5 +1,5 @@
 <div v-show="completed_steps_up_to({{ $step }})" :class="['step', completed_steps[{{ $step }}] ? 'completed' : '']">
-    <h3 class="">Enable API's for @{{ config ? config.project_name : 'your project' }} in Google Console</h3>
+    <h3 class="">Enable API's for @{{ config ? config.project_id : 'your project' }} in Google Console</h3>
     <div class="step-content">
         <ul>
             @foreach(config('soda.analytics.apis') as $api)

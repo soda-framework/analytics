@@ -12,7 +12,7 @@
     class GoogleAPI extends BaseController
     {
         const CLIENT = 1;
-        const ANALYTICS = 2;
+        const SERVER = 2;
         /**
          * @var $client to be authorized by Google.
          */
@@ -28,7 +28,7 @@
             if( $type == GoogleAPI::CLIENT ) {
                 $this->client = $this->AuthenticateCurrentClient();
             }
-            else if ( $type == GoogleAPI::ANALYTICS ) {
+            else if ( $type == GoogleAPI::SERVER ) {
                 $this->client = $this->AuthenticateAnalyticsClient();
             }
         }

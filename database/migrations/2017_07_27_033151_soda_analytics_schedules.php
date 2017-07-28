@@ -11,9 +11,17 @@ class SodaAnalyticsSchedules extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        //
+    public function up() {
+        Schema::create('soda_analytics_schedules', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('type',50)->nullable();
+            $table->string('emails')->nullable();
+            $table->dateTime('analytics_from')->nullable();
+            $table->dateTime('analytics_to')->nullable();
+            $table->string('request')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -21,8 +29,7 @@ class SodaAnalyticsSchedules extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        //
+    public function down() {
+        Schema::dropIfExists('soda_analytics_schedules');
     }
 }

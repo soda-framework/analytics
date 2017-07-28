@@ -64,6 +64,11 @@
     </div>
 @endsection
 
+@section('modals')
+    @parent
+    @include('soda-analytics::cms.partials.error')
+@endsection
+
 @section('footer.js')
     @parent
     <script src="/soda/analytics/js/app.js"></script>

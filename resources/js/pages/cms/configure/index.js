@@ -5,7 +5,7 @@ if ($('#configure').length) {
             config: null,
             disable_watchers: false,
             completed_steps: {
-                1: false, // project name
+                1: false, // project id
                 2: false, // google login credentials
                 3: meta('logged_id') == 'true', // logged in
                 4: false, // enabled api's
@@ -25,6 +25,12 @@ if ($('#configure').length) {
             properties: {0: 'Loading...'},
             new_property: false,
             new_property_name: null,
+
+            view_id: 0,
+            view_name: null,
+            views: {0: 'Loading...'},
+            new_view: false,
+            new_view_name: null,
         },
         created: function () {
             var me = this;
@@ -35,8 +41,17 @@ if ($('#configure').length) {
                 me.account_name = me.config.account_name;
                 me.property_id = me.config.property_id;
                 me.property_name = me.config.property_name;
+                me.view_id = me.config.view_id;
+                me.view_name = me.config.view_name;
+
                 Vue.nextTick(function(){
                     me.disable_watchers = false;
+
+                    if (me.completed_steps_up_to(6)) {
+                        if (!me.account_id) me.post_get_accounts();
+                        else if (!me.property_id) me.post_get_properties();
+                        else if (!me.view_id) me.post_get_views();
+                    }
                 });
             });
         },
@@ -56,8 +71,7 @@ if ($('#configure').length) {
                         me.new_account = true;
                     }
                     else if (me.account_id != 0) {
-                        me.post_save_account();
-                        me.post_get_web_properties();
+                        me.post_get_properties();
                     }
                 }
 
@@ -72,7 +86,18 @@ if ($('#configure').length) {
                         me.new_property = true;
                     }
                     else if (me.property_id != 0) {
-                        me.post_save_property();
+                        me.post_get_views();
+                    }
+                }
+            },
+            view_id: function () {
+                var me = this;
+
+                if (!me.disable_watchers) {
+                    me.view_name = me.views[me.view_id];
+
+                    if (me.view_id == 1) {
+                        me.new_view = true;
                     }
                 }
             },
@@ -89,12 +114,15 @@ if ($('#configure').length) {
                             me.config = response.data.config;
                             callback();
                         }
+                        else{
+                            analytics_error.error('Configuration', 'There was an error loading the configuration. Please try again later.')
+                        }
                     });
             },
             update_steps: function () {
                 var me = this;
 
-                if( me.config.project_name ){
+                if( me.config.project_id ){
                     me.completed_steps[1] = true;
                 }
                 if (me.config.client_id && me.config.client_secret) {
@@ -125,17 +153,20 @@ if ($('#configure').length) {
                 return true;
             },
 
-            // Save Project Name
-            set_project_name: function (project_name) {
+            // Save Project ID
+            set_project_id: function (project_id) {
                 var me = this;
 
-                axios.post('/cms/analytics/configure/project-name', {
+                axios.post('/cms/analytics/configure/project-id', {
                         _token: meta('csrf-token'),
-                        project_name: project_name,
+                        project_id: project_id,
                     })
                     .then(function (response) {
                         if (response.data.success) {
                             me.config = response.data.config;
+                        }
+                        else{
+                            analytics_error.error('Configuration', response.data.message);
                         }
                     });
             },
@@ -153,6 +184,9 @@ if ($('#configure').length) {
                         if (response.data.success) {
                             me.config = response.data.config;
                         }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
                     });
             },
 
@@ -168,8 +202,11 @@ if ($('#configure').length) {
                     })
                     .then(function (response) {
                         if (response.data.success) {
-                            me.accounts = Object.assign({0: 'Choose your account'}, {1: 'Create new account'}, response.data.accounts);
+                            me.accounts = Object.assign({0: 'Choose your account'}, /*{1: 'Create new account'},*/ response.data.accounts);
                             me.account_id = 0;
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
                         }
                     });
             },
@@ -182,8 +219,18 @@ if ($('#configure').length) {
                     })
                     .then(function (response) {
                         if (response.data.success) {
-                            me.post_get_accounts();
+                            me.disable_watchers = true;
                             me.account_id = response.data.account_id;
+                            me.account_name = response.data.account_name;
+                            me.post_save_account();
+                            me.post_get_properties();
+
+                            Vue.nextTick(function () {
+                                me.disable_watchers = false;
+                            });
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
                         }
                     });
             },
@@ -200,10 +247,13 @@ if ($('#configure').length) {
                         if (response.data.success) {
                             me.config = response.data.config;
                         }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
                     });
             },
 
-            post_get_web_properties: function () {
+            post_get_properties: function () {
                 var me = this;
 
                 me.reset_properties();
@@ -216,7 +266,9 @@ if ($('#configure').length) {
                         if (response.data.success) {
                             me.properties = Object.assign({0: 'Choose your property'}, {1: 'Create new property'}, response.data.properties);
                             me.property_id = 0;
-                            window.a = me.properties;
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
                         }
                     });
             },
@@ -230,8 +282,18 @@ if ($('#configure').length) {
                     })
                     .then(function (response) {
                         if (response.data.success) {
-                            me.post_get_web_properties();
-                            me.account = response.data.property_id;
+                            me.disable_watchers = true;
+                            me.property_id = response.data.property_id;
+                            me.property_name = response.data.property_name;
+                            me.post_save_property();
+                            me.post_get_views();
+
+                            Vue.nextTick(function () {
+                                me.disable_watchers = false;
+                            });
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
                         }
                     });
             },
@@ -248,7 +310,80 @@ if ($('#configure').length) {
                         if (response.data.success) {
                             me.config = response.data.config;
                         }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
                     });
+            },
+            post_get_views: function () {
+                var me = this;
+
+                me.reset_views();
+
+                axios.post('/cms/analytics/configure/account-property-views', {
+                        _token: meta('csrf-token'),
+                        account_id: me.account_id,
+                        property_id: me.property_id,
+                    })
+                    .then(function (response) {
+                        if (response.data.success) {
+                            me.views = Object.assign({0: 'Choose your view'}, {1: 'Create new view'}, response.data.views);
+                            me.view_id = 0;
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
+                    });
+            },
+            post_new_view: function (view_name) {
+                var me = this;
+
+                axios.post('/cms/analytics/configure/create-view', {
+                        _token: meta('csrf-token'),
+                        account_id: me.account_id,
+                        property_id: me.property_id,
+                        view_name: view_name
+                    })
+                    .then(function (response) {
+                        if (response.data.success) {
+                            me.disable_watchers = true;
+                            me.view_name = response.data.view_name;
+                            me.view_id = response.data.view_id;
+                            me.post_save_view();
+
+                            Vue.nextTick(function () {
+                                me.disable_watchers = false;
+                            });
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
+                    });
+            },
+            // Save Property
+            post_save_view: function () {
+                var me = this;
+
+                axios.post('/cms/analytics/configure/save-view', {
+                        _token: meta('csrf-token'),
+                        view_id: me.view_id,
+                        view_name: me.view_name,
+                    })
+                    .then(function (response) {
+                        if (response.data.success) {
+                            me.config = response.data.config;
+                        }
+                        else {
+                            analytics_error.error('Configuration', response.data.message);
+                        }
+                    });
+            },
+            post_save_account_property_view: function(){
+                var me = this;
+
+                me.post_save_account();
+                me.post_save_property();
+                me.post_save_view();
             },
 
             reset: function () {
@@ -261,14 +396,32 @@ if ($('#configure').length) {
 
                 me.account_id = 0;
                 me.accounts = {0: 'Loading...'};
+                me.config.account_id = 0;
+                me.config.account_name = null;
 
                 me.reset_properties();
+                me.update_steps();
             },
             reset_properties: function () {
                 var me = this;
 
                 me.property_id = 0;
                 me.properties = {0: 'Loading...'};
+                me.config.property_id = 0;
+                me.config.property_name = null;
+
+                me.reset_views();
+                me.update_steps();
+            },
+            reset_views: function () {
+                var me = this;
+
+                me.view_id = 0;
+                me.views = {0: 'Loading...'};
+                me.config.view_id = 0;
+                me.config.view_name = null;
+
+                me.update_steps();
             },
 
         },

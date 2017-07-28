@@ -2,12 +2,12 @@
     use \Soda\Cms\Database\Models\ApplicationUrl;
 ?>
 
-<div :class="['step', config && config.project_name && completed_steps[{{ $step }}] ? 'completed' : '']">
+<div v-show="completed_steps_up_to({{ $step }})" :class="['step', config && config.project_id && completed_steps[{{ $step }}] ? 'completed' : '']">
     <h3 class="">Create Client Credentials for Google Authentication</h3>
     <div v-if="config" class="step-content">
         <ul>
             <li>
-                Go to the <a :href="'https://console.developers.google.com/apis/credentials?project='+ config.project_name"
+                Go to the <a :href="'https://console.developers.google.com/apis/credentials?project='+ config.project_id"
                    target="_blank">Credentials Tab</a> for your project on Google Console.
             </li>
             <li>

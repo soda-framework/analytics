@@ -13,7 +13,13 @@ class SodaAnalyticsAudience extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('soda_analytics_audience', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('users')->nullable();
+            $table->integer('sessions')->nullable();
+            $table->string('avg_session_duration',50)->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +29,6 @@ class SodaAnalyticsAudience extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('soda_analytics_audience');
     }
 }

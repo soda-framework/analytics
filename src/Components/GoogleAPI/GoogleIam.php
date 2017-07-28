@@ -23,10 +23,13 @@
         public function CreateServiceAccount($name) {
             try {
                 $serviceAccount = new Google_Service_Iam_ServiceAccount();
-                $serviceAccount->setDisplayName(config('soda.analytics.service-account-name') . ': ' . Soda::getApplication()->name);
+                $displayName = preg_replace("/[^ \w]+/", "", config('soda.analytics.service-account-name')); // remove special characters
+                $serviceAccount->setDisplayName($displayName);
 
                 $accountRequest = new Google_Service_Iam_CreateServiceAccountRequest();
-                $accountRequest->setAccountId($name . '-' . hexdec(uniqid()));
+                $accountID = $name . '-' . hexdec(uniqid()); // randomize
+                $accountID = substr($accountID, 0, 30); // trim, google has a max length (not sure what it is though, but 30 works)
+                $accountRequest->setAccountId($accountID);
                 $accountRequest->setServiceAccount($serviceAccount);
 
                 $serviceAccount = $this->iam->projects_serviceAccounts->create('projects/'.$name, $accountRequest);

@@ -4,6 +4,7 @@
     use Google_Service_Analytics;
     use Google_Service_Analytics_EntityUserLink;
     use Google_Service_Analytics_EntityUserLinkPermissions;
+    use Google_Service_Analytics_Profile;
     use Google_Service_Analytics_UserRef;
     use Google_Service_Analytics_Webproperty;
     use Google_Service_AnalyticsReporting_DateRange;
@@ -20,7 +21,7 @@
         public $analytics;
 
         public function __construct() {
-            parent::__construct(GoogleAPI::ANALYTICS);
+            parent::__construct();
             $this->analytics = new Google_Service_Analytics($this->client);
         }
 
@@ -100,13 +101,58 @@
 
         public function CreateAccountProperty($accountID, $propertyName, $optParams = []) {
             try {
+                // create a new property
                 $property = new Google_Service_Analytics_Webproperty();
                 $property->setName($propertyName);
-
+                $property->setWebsiteUrl(\Request::root());
+                $property->setIndustryVertical('UNSPECIFIED');
                 $propertyObject = $this->analytics->management_webproperties->insert($accountID, $property, $optParams);
-                dd( $propertyObject );
+
+                // create a default view/profile now that we have an id
+                $view = new Google_Service_Analytics_Profile();
+                $view->setName('All Web Site Data');
+                $viewObject = $this->analytics->management_profiles->insert($accountID, $propertyObject->id, $view, $optParams);
+
+                // update the new property to have this default view
+                $property = new Google_Service_Analytics_Webproperty();
+                $property->setDefaultProfileId($viewObject->id);
+                $propertyObject = $this->analytics->management_webproperties->patch($accountID, $propertyObject->id, $property);
 
                 return $propertyObject;
+            } catch (apiServiceException $e) {
+                print 'There was an Analytics API service error '
+                    . $e->getCode() . ':' . $e->getMessage();
+
+            } catch (apiException $e) {
+                print 'There was a general API error '
+                    . $e->getCode() . ':' . $e->getMessage();
+            }
+        }
+
+        public function GetAccountPropertyViews($accountID, $propertyID, $optParams = []) {
+            try {
+                $viewsObject = $this->analytics->management_profiles->listManagementProfiles($accountID, $propertyID, $optParams);
+                $views = $viewsObject->getItems();
+
+                return $views;
+            } catch (apiServiceException $e) {
+                print 'There was an Analytics API service error '
+                    . $e->getCode() . ':' . $e->getMessage();
+
+            } catch (apiException $e) {
+                print 'There was a general API error '
+                    . $e->getCode() . ':' . $e->getMessage();
+            }
+        }
+
+        public function CreateAccountPropertyView($accountID, $propertyID, $viewName, $optParams = []) {
+            try {
+                $view = new Google_Service_Analytics_Profile();
+                $view->setName($viewName);
+
+                $viewObject = $this->analytics->management_profiles->insert($accountID, $propertyID, $view, $optParams);
+
+                return $viewObject;
             } catch (apiServiceException $e) {
                 print 'There was an Analytics API service error '
                     . $e->getCode() . ':' . $e->getMessage();

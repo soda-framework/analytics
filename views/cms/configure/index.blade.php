@@ -44,7 +44,7 @@
             <h2>Setup</h2>
         </div>
 
-        @include('soda-analytics::cms.configure.steps.project-name',['step'=>1])
+        @include('soda-analytics::cms.configure.steps.project-id',['step'=>1])
 
         @include('soda-analytics::cms.configure.steps.login-credentials',['step'=>2])
 
@@ -59,6 +59,11 @@
         @include('soda-analytics::cms.configure.steps.analytics-user',['step'=>7])
 
     </div>
+@endsection
+
+@section('modals')
+    @parent
+    @include('soda-analytics::cms.partials.error')
 @endsection
 
 @section('footer.js')

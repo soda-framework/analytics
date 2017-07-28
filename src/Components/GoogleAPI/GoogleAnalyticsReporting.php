@@ -22,7 +22,7 @@
         public $analytics_reporting;
 
         public function __construct() {
-            parent::__construct(GoogleAPI::ANALYTICS);
+            parent::__construct(GoogleAPI::SERVER);
             $this->analytics_reporting = new Google_Service_AnalyticsReporting($this->client);
         }
 
