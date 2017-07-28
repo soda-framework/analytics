@@ -31,7 +31,8 @@
 
 @section('content')
     <div id="schedules" class="content-top">
-        <form id="schedule_frequency" method="POST" action="{{ route('soda.analytics.scheduler.config-update') }}" enctype="multipart/form-data">
+        <form id="schedule_frequency" method="POST" action="{{ route('soda.analytics.scheduler.config-update') }}"
+              enctype="multipart/form-data">
             {!! csrf_field() !!}
 
             {!! app('soda.form')->dropdown([
@@ -50,7 +51,22 @@
         &nbsp;&nbsp;&nbsp;<code>{!! $cron !!} php /path/to/artisan soda-analytics:schedules 1>> /dev/null 2>&1</code>
         <br/>
         to your server (using the <code>crontab -e</code> command),
-        which will execute <code>php /path/to/artisan soda-analytics:schedules</code> on a <b>{{ $frequency }}</b> basis.
+        which will execute <code>php /path/to/artisan soda-analytics:schedules</code> on a <b>{{ $frequency }}</b>
+        basis.
+
+        <br/>
+        <br/>
+
+        The scheduler uses Laravel's built in <code>{{ \Mail::class }}</code> facilities.
+        <br/>
+        Make sure that you have configured your environment variables accordingly:
+        <br/>
+        &nbsp;&nbsp;<code>MAIL_DRIVER=</code><br/>
+        &nbsp;&nbsp;<code>MAIL_HOST=</code><br/>
+        &nbsp;&nbsp;<code>MAIL_PORT=</code><br/>
+        &nbsp;&nbsp;<code>MAIL_USERNAME=</code><br/>
+        &nbsp;&nbsp;<code>MAIL_PASSWORD=</code><br/>
+        &nbsp;&nbsp;<code>MAIL_ENCRYPTION=</code><br/>
     </div>
 
     <div class="content-block">
